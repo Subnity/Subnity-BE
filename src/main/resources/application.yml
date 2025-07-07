@@ -1,0 +1,52 @@
+springdoc:
+  swagger-ui:
+    path: ${API_DOCS_PATH}
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+      enabled: true
+
+  jpa:
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret-key: ${JWT}
+
+crypto:
+  private-key: ${CRYPTO_PRIVATE_KEY}
+  transformation: ${CRYPTO_TRANSFORMATION}
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: ${MAIL_PORT}
+#    username: ${MAIL_USERNAME}
+#    password: ${MAIL_PW}
+#    properties:
+#      mail:
+#        smtp:
+#          starttls:
+#            enable: true
+#          auth: true
+
+#cloud:
+#  aws:
+#    credentials:
+#      access-key: ${AWS_ACCESS_KEY}
+#      secret-key: ${AWS_SECRET_KEY}
+#    s3:
+#      bucket: ${AWS_S3_BUCKET}
+#      default-profile-url: ${PROFILE_URL}
+#    region:
+#      static: ap-northeast-2
+#      auto: false
+#    stack:
+#      auto: false
