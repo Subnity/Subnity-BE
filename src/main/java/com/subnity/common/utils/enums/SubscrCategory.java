@@ -1,11 +1,11 @@
-package com.subnity.utils.enums;
+package com.subnity.common.utils.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Category {
+public enum SubscrCategory {
 
   STREAMING("스트리밍"),
   MUSIC("음악"),

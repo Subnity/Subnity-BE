@@ -5,11 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum State {
+public enum PaymentCycle {
 
-  ACTIVITY("활성화"),
-  EXPIRE_SOON("곧 만료"),
-  TERMINATION("해지");
+  MONTH("월"),
+  YEAR("년");
 
   private final String value;
 }
