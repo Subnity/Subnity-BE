@@ -20,12 +20,10 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-        # Gradle를 빌드하기 위해 OS에 권한을 주기
       - name: 권한 부여
         run: chmod +x ./gradlew
         shell: bash
 
-        # 코드 빌드하기
       - name: Gradle 빌드
         run: ./gradlew clean build -x test
         shell: bash
@@ -39,14 +37,14 @@ jobs:
           cp -r .platform deploy/.platform
           cd deploy && zip -r deploy.zip .
 
-#      - name: Elastic Beanstalk에 배포
-#        uses: einaregilsson/beanstalk-deploy@v20
-#        with:
-#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          aws_secret_key: ${{ secrets.AWS_SECRET_KET_ID }}
-#          application_name:
-#          environment_name:
-#          version_label: github-action-${{ github.sha }}
-#          region: ap-northeast-2
-#          deployment_package: deploy/deploy.zip
-#          wait_for_deployment: true
+      - name: Elastic Beanstalk에 배포
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: Subnity
+          environment_name: Subnity-env
+          version_label: github-action-${{ github.sha }}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          wait_for_deployment: true
