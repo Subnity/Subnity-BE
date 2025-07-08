@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum SubscrState {
+public enum SubscrStatus {
 
   ACTIVITY("활성화"),
   EXPIRE_SOON("곧 만료"),

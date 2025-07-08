@@ -1,6 +1,6 @@
 package com.subnity.domain.test;
 
-import com.subnity.common.domain.TimeStampedEntity;
+import com.subnity.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "test")
-public class TestEntity extends TimeStampedEntity {
+public class TestEntity extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
