@@ -1,4 +1,4 @@
-package com.subnity.domain.member.repository.enums;
+package com.subnity.domain.member.enums;
 
 import lombok.Getter;
 
