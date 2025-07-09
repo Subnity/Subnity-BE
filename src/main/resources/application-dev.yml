@@ -1,6 +1,3 @@
-server:
-  port: ${SERVER_PORT_DEV}
-
 spring:
   config:
     activate:
