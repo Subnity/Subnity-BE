@@ -6,15 +6,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Enum 조회 응답 객체")
-public class GetEnumResponse {
+@AllArgsConstructor
+@Schema(description = "Enum 목록 조회 DTO")
+public class GetEnumListDto {
 
-  @Schema(description = "Enum 목록")
-  private List<GetEnumListDto> enumList;
+  @Schema(description = "enum 코드")
+  private String code;
+
+  @Schema(description = "enum 값")
+  private String value;
 }
