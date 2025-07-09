@@ -4,6 +4,7 @@ import com.subnity.common.api_response.ApiResponse;
 import com.subnity.domain.test.controller.request.CreateTestRequest;
 import com.subnity.domain.test.controller.response.GetTestResponse;
 import com.subnity.domain.test.service.TestService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Hidden
 @RestController
 @RequestMapping(value = "/test")
 @RequiredArgsConstructor
