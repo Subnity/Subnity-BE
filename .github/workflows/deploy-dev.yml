@@ -29,11 +29,11 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: 권한 부여
-        run: ./gradlew clean build -x test
+        run: chmod +x ./gradlew
         shell: bash
 
       - name: Gradle 빌드
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
         shell: bash
 
       - name: 배포 준비
