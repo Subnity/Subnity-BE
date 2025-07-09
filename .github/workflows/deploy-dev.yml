@@ -25,7 +25,7 @@ jobs:
         shell: bash
 
       - name: Gradle 빌드
-        run: ./gradlew clean build -x test
+        run: ./gradlew clean build
         shell: bash
 
       - name: 배포 준비
@@ -47,4 +47,5 @@ jobs:
           version_label: github-action-${{ github.sha }}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
+          wait_for_environment_recovery: 500
           wait_for_deployment: false
