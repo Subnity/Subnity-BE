@@ -1,4 +1,4 @@
-name: deploy
+name: Subnity CI/CD Dev
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 jobs:
   bulid:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'ci/#4-ci'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
 
     steps:
       - name: 코드 가져오기
@@ -53,9 +53,8 @@ jobs:
           application_name: Subnity
           environment_name: Subnity-env
           version_label: github-action-${{ github.sha }}
-#          version_label: Sample
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
           use_existing_version_if_available: false # 기존 버전 사용 설정
           wait_for_environment_recovery: 500
-          wait_for_deployment: false
+          wait_for_deployment: true
