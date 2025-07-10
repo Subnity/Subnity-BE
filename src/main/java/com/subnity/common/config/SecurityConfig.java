@@ -1,15 +1,26 @@
 package com.subnity.common.config;
 
+import com.subnity.security.OAuth2Service;
+import com.subnity.security.handler.AuthenticationFailureHandler;
+import com.subnity.security.handler.AuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final OAuth2Service oAuth2Service;
+  private final AuthenticationSuccessHandler successHandler;
+  private final AuthenticationFailureHandler failureHandler;
 
   /**
    * SecurityFilterChain 설정
@@ -42,12 +53,14 @@ public class SecurityConfig {
     });
 
     // OAuth2 클래스 구성 완료 후 주석 제거
-//    http.oauth2Login(oauth2LoginConfig -> {
-//      oauth2LoginConfig.loginPage("/login");
-////        .authorizedClientService()
-////        .successHandler()
-////        .failureHandler();
-//    });
+    http.oauth2Login(oauth2LoginConfig -> {
+      oauth2LoginConfig.loginPage("/login")
+        .userInfoEndpoint(userInfoEndpointConfig ->
+          userInfoEndpointConfig.userService(oAuth2Service)
+        )
+        .successHandler(successHandler)
+        .failureHandler(failureHandler);
+    });
 
     return http.build();
   }
