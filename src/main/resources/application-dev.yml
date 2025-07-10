@@ -16,3 +16,17 @@ spring:
       host: ${REDIS_HOST_DEV}
       repositories:
         enabled: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: ${GOOGLE_CLIENT_ID_DEV}
+            client-secret: ${GOOGLE_SECRET_KEY_DEV}
+            redirect-uri: ${REDIRECT_URL_DEV}
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
