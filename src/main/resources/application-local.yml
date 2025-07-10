@@ -1,6 +1,20 @@
 server:
   port: 8080
 
+springdoc:
+  swagger-ui:
+    path: ${API_DOCS_PATH}
+    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html
+    oauth:
+      client-id: ${GOOGLE_CLIENT_ID}
+      client-secret: ${GOOGLE_SECRET_KEY}
+      scopes:
+        - profile
+        - email
+        - https://www.googleapis.com/auth/gmail.readonly
+      useBasicAuthenticationWithAccessCodeGrant: true
+      usePkceWithAuthorizationCodeGrant: true
+
 spring:
   config:
     activate:

@@ -49,15 +49,18 @@ public class SecurityConfig {
         "/swagger-resources/**",
         "/webjars/**"
       ).permitAll()
-      .anyRequest().authenticated();
+      .anyRequest()
+        .authenticated();
     });
 
     // OAuth2 클래스 구성 완료 후 주석 제거
     http.oauth2Login(oauth2LoginConfig -> {
+//      oauth2LoginConfig.userInfoEndpoint(e -> e.userService(oAuth2Service))
+//        .successHandler(successHandler)
+//        .failureHandler(failureHandler);
+
       oauth2LoginConfig.loginPage("/login")
-        .userInfoEndpoint(userInfoEndpointConfig ->
-          userInfoEndpointConfig.userService(oAuth2Service)
-        )
+        .userInfoEndpoint(e -> e.userService(oAuth2Service))
         .successHandler(successHandler)
         .failureHandler(failureHandler);
     });

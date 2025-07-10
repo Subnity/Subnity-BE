@@ -20,6 +20,6 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     HttpServletResponse response,
     AuthenticationException exception
   ) throws IOException, ServletException {
-    log.error("구글 로그인 실패!ㅠㅠ");
+    log.error("구글 로그인 실패 : {}", exception.getMessage(), exception);
   }
 }
