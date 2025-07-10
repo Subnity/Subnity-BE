@@ -30,3 +30,9 @@ spring:
             scope:
               - profile
               - email
+              - https://www.googleapis.com/auth/gmail.readonly # Gmail 읽기 권한
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo

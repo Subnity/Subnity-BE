@@ -42,7 +42,7 @@ public class GoogleUser implements OAuth2User {
   }
 
   public String getId() {
-    return "google-" + registrationId;
+    return registrationId + "-" + attributes.get("sub").toString();
   }
 
   public String getProviderId() {

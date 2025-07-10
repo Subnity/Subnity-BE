@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
   @Override
   public void onAuthenticationFailure(
@@ -20,6 +20,6 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
     HttpServletResponse response,
     AuthenticationException exception
   ) throws IOException, ServletException {
-    log.error("구글 로그인 실페!ㅠㅠ");
+    log.error("구글 로그인 실패!ㅠㅠ");
   }
 }

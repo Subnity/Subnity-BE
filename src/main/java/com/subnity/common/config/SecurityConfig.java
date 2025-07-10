@@ -1,8 +1,8 @@
 package com.subnity.common.config;
 
 import com.subnity.security.OAuth2Service;
-import com.subnity.security.handler.AuthenticationFailureHandler;
-import com.subnity.security.handler.AuthenticationSuccessHandler;
+import com.subnity.security.handler.AuthFailureHandler;
+import com.subnity.security.handler.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
   private final OAuth2Service oAuth2Service;
-  private final AuthenticationSuccessHandler successHandler;
-  private final AuthenticationFailureHandler failureHandler;
+  private final AuthSuccessHandler successHandler;
+  private final AuthFailureHandler failureHandler;
 
   /**
    * SecurityFilterChain 설정
@@ -40,7 +40,7 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/enum/**"
+        "/health", "/test/**", "/enum/**", "/login/**"
       ).permitAll()
       .requestMatchers( // Swagger 관련 Url 처리
         "/v1/api-docs",

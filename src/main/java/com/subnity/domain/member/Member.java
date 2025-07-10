@@ -14,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,10 +27,6 @@ public class Member extends BaseTimeEntity {
 
   @Column(name = "nick_name", nullable = false)
   private String nickName;
-
-  @Column(name = "password", nullable = false)
-  @Convert(converter = CryptoConverter.class)
-  private String password;
 
   @Column(name = "profile_url", nullable = false)
   private String profileUrl;
