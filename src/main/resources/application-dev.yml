@@ -39,7 +39,7 @@ spring:
             client-name: google
             client-id: ${GOOGLE_CLIENT_ID_DEV}
             client-secret: ${GOOGLE_SECRET_KEY_DEV}
-            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            redirect-uri: https://api.subnity.site/login/oauth2/code/google
             authorization-grant-type: authorization_code
             scope:
               - profile
