@@ -19,16 +19,16 @@ public class SwaggerConfig {
       .version("mvp");
 
     // JWT 구현 시 제거
-//    String jwtSchemeName = "JWT TOKEN";
-//    SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
-//
-//    Components components = new Components()
-//      .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
-//        .name("Authorization")
-//        .type(SecurityScheme.Type.HTTP)
-//        .scheme("bearer")
-//        .bearerFormat("JWT")
-//        .in(SecurityScheme.In.HEADER));
+    String jwtSchemeName = "JWT TOKEN";
+    SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
+
+    Components components = new Components()
+      .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
+        .name("Authorization")
+        .type(SecurityScheme.Type.HTTP)
+        .scheme("bearer")
+        .bearerFormat("JWT")
+        .in(SecurityScheme.In.HEADER));
 
 //    SecurityRequirement securityRequirement = new SecurityRequirement().addList("oauth2");
 //    Components components = new Components()
@@ -48,23 +48,23 @@ public class SwaggerConfig {
 //          )
 //      );
 
-    SecurityRequirement securityRequirement = new SecurityRequirement().addList("Google OAuth2");
-    Components components = new Components()
-      .addSecuritySchemes("Google OAuth2",
-        new SecurityScheme()
-          .type(SecurityScheme.Type.OAUTH2)
-          .flows(new OAuthFlows()
-            .authorizationCode(new OAuthFlow()
-              .authorizationUrl("/oauth2/authorization/google")
-              .tokenUrl("https://oauth2.googleapis.com/token")
-              .scopes(new Scopes()
-                .addString("profile", "Profile")
-                .addString("email",   "Email")
-                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Read‑only")
-              )
-            )
-          )
-      );
+//    SecurityRequirement securityRequirement = new SecurityRequirement().addList("Google OAuth2");
+//    Components components = new Components()
+//      .addSecuritySchemes("Google OAuth2",
+//        new SecurityScheme()
+//          .type(SecurityScheme.Type.OAUTH2)
+//          .flows(new OAuthFlows()
+//            .authorizationCode(new OAuthFlow()
+//              .authorizationUrl("/oauth2/authorization/google")
+//              .tokenUrl("https://oauth2.googleapis.com/token")
+//              .scopes(new Scopes()
+//                .addString("profile", "Profile")
+//                .addString("email",   "Email")
+//                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Read‑only")
+//              )
+//            )
+//          )
+//      );
 
     return new OpenAPI()
       .info(info)

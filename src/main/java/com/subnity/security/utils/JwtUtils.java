@@ -2,6 +2,7 @@ package com.subnity.security.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +18,16 @@ import java.util.Date;
 public class JwtUtils {
 
   @Value("${jwt.secret}")
-  private static String jwtSecretKey;
+  private String jwtSecretKey;
 
-  private static final Key secretKey = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
-  private static final Claims claims = Jwts.claims();
+  private static Key secretKey;
+  private static Claims claims;
+
+  @PostConstruct
+  public void init() {
+    secretKey = Keys.hmacShaKeyFor(this.jwtSecretKey.getBytes(StandardCharsets.UTF_8));
+    claims = Jwts.claims();
+  }
 
   public static String createAccessToken(String userId, String role) {
     claims.put("id", userId);
