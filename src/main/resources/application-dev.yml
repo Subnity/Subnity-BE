@@ -1,16 +1,9 @@
+server:
+  site_url: ${SITE_URL_DEV}
+
 springdoc:
   swagger-ui:
     path: ${API_DOCS_PATH}
-    oauth2-redirect-url: ${REDIRECT_URL_DEV}
-    oauth:
-      client-id: ${GOOGLE_CLIENT_ID_DEV}
-      client-secret: ${GOOGLE_SECRET_KEY_DEV}
-      scopes:
-        - profile
-        - email
-        - https://www.googleapis.com/auth/gmail.readonly
-      useBasicAuthenticationWithAccessCodeGrant: true
-      usePkceWithAuthorizationCodeGrant: true
 
 spring:
   config:
@@ -39,7 +32,7 @@ spring:
             client-name: google
             client-id: ${GOOGLE_CLIENT_ID_DEV}
             client-secret: ${GOOGLE_SECRET_KEY_DEV}
-            redirect-uri: https://api.subnity.site/login/oauth2/code/google
+            redirect-uri: ${REDIRECT_URL_DEV}
             authorization-grant-type: authorization_code
             scope:
               - profile

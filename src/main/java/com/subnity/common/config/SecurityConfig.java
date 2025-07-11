@@ -47,10 +47,7 @@ public class SecurityConfig {
         "/v1/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-resources/**",
-        "/webjars/**",
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-        "/oauth2/**"
+        "/webjars/**"
       ).permitAll()
       .anyRequest()
         .authenticated();
@@ -62,11 +59,6 @@ public class SecurityConfig {
         .userInfoEndpoint(e -> e.userService(oAuth2Service))
         .successHandler(successHandler)
         .failureHandler(failureHandler);
-
-//      oauth2LoginConfig.loginPage("/login")
-//        .userInfoEndpoint(e -> e.userService(oAuth2Service))
-//        .successHandler(successHandler)
-//        .failureHandler(failureHandler);
     });
 
     return http.build();
