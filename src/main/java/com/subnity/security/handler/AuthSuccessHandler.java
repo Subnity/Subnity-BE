@@ -58,7 +58,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     accessToken.setMaxAge(3600);
     response.addCookie(accessToken);
 
-    response.sendRedirect("http://localhost:8080");
+    response.sendRedirect("https://api.subnity.site");
     log.info("구글 로그인 성공!");
   }
 }
