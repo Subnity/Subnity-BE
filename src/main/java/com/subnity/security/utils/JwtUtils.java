@@ -17,12 +17,12 @@ import java.util.Date;
 public class JwtUtils {
 
   @Value("${jwt.secret}")
-  private String jwtSecretKey;
+  private static String jwtSecretKey;
 
-  private final Key secretKey = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
-  private final Claims claims = Jwts.claims();
+  private static final Key secretKey = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
+  private static final Claims claims = Jwts.claims();
 
-  public String createAccessToken(String userId, String role) {
+  public static String createAccessToken(String userId, String role) {
     claims.put("id", userId);
     claims.put("name", userId);
     claims.put("role", role);
@@ -37,7 +37,7 @@ public class JwtUtils {
       .compact();
   }
 
-  public String createRefreshToken(String userId, String role) {
+  public static String createRefreshToken(String userId, String role) {
     claims.put("id", userId);
     claims.put("name", userId);
     claims.put("role", role);
@@ -53,7 +53,7 @@ public class JwtUtils {
   }
 
   // 유저 아이디 가져오기
-  public String getMemberId(String token) {
+  public static String getMemberId(String token) {
     try {
       return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("id", String.class);
     } catch (ExpiredJwtException e) {
@@ -62,7 +62,7 @@ public class JwtUtils {
   }
 
   // 유저 이름 가져오기
-  public String getMemberName(String token) {
+  public static String getMemberName(String token) {
     try {
       return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("name", String.class);
     } catch (ExpiredJwtException e) {
@@ -71,7 +71,7 @@ public class JwtUtils {
   }
 
   // 권한 가져오기
-  public String getRole(String token) {
+  public static String getRole(String token) {
     try {
       return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("role", String.class);
     } catch (ExpiredJwtException e) {
@@ -80,7 +80,7 @@ public class JwtUtils {
   }
 
   // 만료 시간 확인
-  public boolean getValidateToken(String token) {
+  public static boolean getValidateToken(String token) {
     try {
       Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
       return true;
