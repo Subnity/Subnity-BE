@@ -30,19 +30,37 @@ public class SwaggerConfig {
 //        .bearerFormat("JWT")
 //        .in(SecurityScheme.In.HEADER));
 
-    SecurityRequirement securityRequirement = new SecurityRequirement().addList("oauth2");
+//    SecurityRequirement securityRequirement = new SecurityRequirement().addList("oauth2");
+//    Components components = new Components()
+//      .addSecuritySchemes("oauth2",
+//        new SecurityScheme()
+//          .type(SecurityScheme.Type.OAUTH2)
+//          .flows(new OAuthFlows()
+//            .authorizationCode(new OAuthFlow()
+//              .authorizationUrl("https://accounts.google.com/o/oauth2/v2/auth")
+//              .tokenUrl("https://oauth2.googleapis.com/token")
+//              .scopes(new Scopes()
+//                .addString("profile", "Profile")
+//                .addString("email", "Email")
+//                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Readonly")
+//              )
+//            )
+//          )
+//      );
+
+    SecurityRequirement securityRequirement = new SecurityRequirement().addList("Google OAuth2");
     Components components = new Components()
-      .addSecuritySchemes("oauth2",
+      .addSecuritySchemes("Google OAuth2",
         new SecurityScheme()
           .type(SecurityScheme.Type.OAUTH2)
           .flows(new OAuthFlows()
             .authorizationCode(new OAuthFlow()
-              .authorizationUrl("https://accounts.google.com/o/oauth2/v2/auth")
+              .authorizationUrl("/oauth2/authorization/google")
               .tokenUrl("https://oauth2.googleapis.com/token")
               .scopes(new Scopes()
                 .addString("profile", "Profile")
-                .addString("email", "Email")
-                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Readonly")
+                .addString("email",   "Email")
+                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Read‑only")
               )
             )
           )

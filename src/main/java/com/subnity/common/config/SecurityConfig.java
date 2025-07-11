@@ -33,7 +33,7 @@ public class SecurityConfig {
     http.httpBasic(AbstractHttpConfigurer::disable)
       .formLogin(AbstractHttpConfigurer::disable)
       .csrf(AbstractHttpConfigurer::disable)
-      .cors(AbstractHttpConfigurer::disable)
+//      .cors(AbstractHttpConfigurer::disable)
       .sessionManagement(session ->
         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       );
@@ -47,7 +47,10 @@ public class SecurityConfig {
         "/v1/swagger-ui/**",
         "/v3/api-docs/**",
         "/swagger-resources/**",
-        "/webjars/**"
+        "/webjars/**",
+        "/swagger-ui/**",
+        "/v3/api-docs/**",
+        "/oauth2/**"
       ).permitAll()
       .anyRequest()
         .authenticated();
@@ -55,14 +58,15 @@ public class SecurityConfig {
 
     // OAuth2 클래스 구성 완료 후 주석 제거
     http.oauth2Login(oauth2LoginConfig -> {
-//      oauth2LoginConfig.userInfoEndpoint(e -> e.userService(oAuth2Service))
-//        .successHandler(successHandler)
-//        .failureHandler(failureHandler);
-
       oauth2LoginConfig.loginPage("/login")
         .userInfoEndpoint(e -> e.userService(oAuth2Service))
         .successHandler(successHandler)
         .failureHandler(failureHandler);
+
+//      oauth2LoginConfig.loginPage("/login")
+//        .userInfoEndpoint(e -> e.userService(oAuth2Service))
+//        .successHandler(successHandler)
+//        .failureHandler(failureHandler);
     });
 
     return http.build();

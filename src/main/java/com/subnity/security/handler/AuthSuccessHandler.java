@@ -5,6 +5,7 @@ import com.subnity.domain.member.enums.Role;
 import com.subnity.domain.member.repository.MemberRepository;
 import com.subnity.security.GoogleUser;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,28 +29,36 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     Authentication authentication
   ) throws IOException, ServletException {
     GoogleUser user = (GoogleUser) authentication.getPrincipal();
-    Member findMember = memberRepository.findById(user.getId()).orElse(null);
+//    Member findMember = memberRepository.findById(user.getId()).orElse(null);
+//
+//    if (findMember != null) {
+//      memberRepository.save(
+//        findMember.toBuilder()
+//          .mailToken(user.getAccessToken())
+//          .build()
+//      );
+//    } else {
+//      memberRepository.save(
+//        Member.builder()
+//          .memberId(user.getId())
+//          .nickName(user.getName())
+//          .role(Role.valueOf(user.getAuthorities().iterator().next().getAuthority()))
+//          .profileUrl("")
+//          .isNotification(true)
+//          .mail(user.getEmail())
+//          .mailToken(user.getAccessToken())
+//          .build()
+//      );
+//    }
 
-    if (findMember != null) {
-      memberRepository.save(
-        findMember.toBuilder()
-          .mailToken(user.getAccessToken())
-          .build()
-      );
-    } else {
-      memberRepository.save(
-        Member.builder()
-          .memberId(user.getId())
-          .nickName(user.getName())
-          .role(Role.valueOf(user.getAuthorities().iterator().next().getAuthority()))
-          .profileUrl("")
-          .isNotification(true)
-          .mail(user.getEmail())
-          .mailToken(user.getAccessToken())
-          .build()
-      );
-    }
+    Cookie accessToken = new Cookie("AT", user.getAccessToken());
+    accessToken.setHttpOnly(true);
+    accessToken.setSecure(true);
+    accessToken.setPath("/");
+    accessToken.setMaxAge(3600);
+    response.addCookie(accessToken);
 
+    response.sendRedirect("http://localhost:8080");
     log.info("구글 로그인 성공!");
   }
 }
