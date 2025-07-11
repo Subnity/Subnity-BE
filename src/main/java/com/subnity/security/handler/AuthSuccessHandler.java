@@ -4,6 +4,9 @@ import com.subnity.domain.member.Member;
 import com.subnity.domain.member.enums.Role;
 import com.subnity.domain.member.repository.MemberRepository;
 import com.subnity.security.GoogleUser;
+import com.subnity.security.dto.JwtClaimsDto;
+import com.subnity.security.utils.JwtUtils;
+import com.subnity.security.utils.RedisUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,35 +36,49 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     Authentication authentication
   ) throws IOException, ServletException {
     GoogleUser user = (GoogleUser) authentication.getPrincipal();
-//    Member findMember = memberRepository.findById(user.getId()).orElse(null);
-//
-//    if (findMember != null) {
-//      memberRepository.save(
-//        findMember.toBuilder()
-//          .mailToken(user.getAccessToken())
-//          .build()
-//      );
-//    } else {
-//      memberRepository.save(
-//        Member.builder()
-//          .memberId(user.getId())
-//          .nickName(user.getName())
-//          .role(Role.valueOf(user.getAuthorities().iterator().next().getAuthority()))
-//          .profileUrl("")
-//          .isNotification(true)
-//          .mail(user.getEmail())
-//          .mailToken(user.getAccessToken())
-//          .build()
-//      );
-//    }
+    Role role = Role.valueOf(user.getAuthorities().iterator().next().getAuthority());
+    Member findMember = memberRepository.findById(user.getId()).orElse(null);
 
-    Cookie accessToken = new Cookie("AT", user.getAccessToken());
-    accessToken.setHttpOnly(true);
-    accessToken.setSecure(true);
-    accessToken.setPath("/");
-    accessToken.setMaxAge(3600);
+    if (findMember != null) {
+      memberRepository.save(
+        findMember.toBuilder()
+          .mailToken(user.getAccessToken())
+          .build()
+      );
+    } else {
+      memberRepository.save(
+        Member.builder()
+          .memberId(user.getId())
+          .nickName(user.getName())
+          .role(role)
+          .profileUrl("") // 추후에 추가 예정
+          .isNotification(true)
+          .mail(user.getEmail())
+          .mailToken(user.getAccessToken())
+          .build()
+      );
+    }
 
-    response.addCookie(accessToken);
+    JwtClaimsDto jwtClaimsDto = JwtClaimsDto.builder()
+      .memberId(user.getId())
+      .memberName(user.getName())
+      .role(role)
+      .build();
+
+    String accessToken = JwtUtils.createAccessToken(jwtClaimsDto);
+    String refreshToken = JwtUtils.createRefreshToken(jwtClaimsDto);
+
+    // Redis에 Refresh Token 저장
+    RedisUtils.save(refreshToken);
+
+    // 쿠키
+    Cookie token = new Cookie("AT", accessToken);
+    token.setHttpOnly(true);
+    token.setSecure(true);
+    token.setPath("/");
+    token.setMaxAge(3600);
+
+    response.addCookie(token);
     response.sendRedirect(siteUrl);
     log.info("구글 로그인 성공!");
   }

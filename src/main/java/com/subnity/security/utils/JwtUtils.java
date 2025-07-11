@@ -1,5 +1,6 @@
 package com.subnity.security.utils;
 
+import com.subnity.security.dto.JwtClaimsDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -29,10 +30,10 @@ public class JwtUtils {
     claims = Jwts.claims();
   }
 
-  public static String createAccessToken(String userId, String role) {
-    claims.put("id", userId);
-    claims.put("name", userId);
-    claims.put("role", role);
+  public static String createAccessToken(JwtClaimsDto dto) {
+    claims.put("id", dto.getMemberId());
+    claims.put("name", dto.getMemberName());
+    claims.put("role", dto.getRole().name());
 
     return Jwts.builder()
       .setHeaderParam("typ", "JWT")
@@ -44,10 +45,10 @@ public class JwtUtils {
       .compact();
   }
 
-  public static String createRefreshToken(String userId, String role) {
-    claims.put("id", userId);
-    claims.put("name", userId);
-    claims.put("role", role);
+  public static String createRefreshToken(JwtClaimsDto dto) {
+    claims.put("id", dto.getMemberId());
+    claims.put("name", dto.getMemberName());
+    claims.put("role", dto.getRole().name());
 
     return Jwts.builder()
       .setHeaderParam("typ", "JWT")
