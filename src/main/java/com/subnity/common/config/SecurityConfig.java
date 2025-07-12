@@ -1,6 +1,7 @@
 package com.subnity.common.config;
 
 import com.subnity.security.OAuth2Service;
+import com.subnity.security.filter.AuthFilter;
 import com.subnity.security.handler.AuthFailureHandler;
 import com.subnity.security.handler.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -33,14 +35,13 @@ public class SecurityConfig {
     http.httpBasic(AbstractHttpConfigurer::disable)
       .formLogin(AbstractHttpConfigurer::disable)
       .csrf(AbstractHttpConfigurer::disable)
-//      .cors(AbstractHttpConfigurer::disable)
       .sessionManagement(session ->
         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       );
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/enum/**", "/login/**", "/p"
+        "/health", "/test/**", "/enum/**", "/login/**"
       ).permitAll()
       .requestMatchers( // Swagger 관련 Url 처리
         "/v1/api-docs",
@@ -49,8 +50,7 @@ public class SecurityConfig {
         "/swagger-resources/**",
         "/webjars/**"
       ).permitAll()
-      .anyRequest()
-        .authenticated();
+      .anyRequest().authenticated();
     });
 
     // OAuth2 클래스 구성 완료 후 주석 제거
@@ -61,7 +61,18 @@ public class SecurityConfig {
         .failureHandler(failureHandler);
     });
 
+    http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
+
     return http.build();
+  }
+
+  /**
+   * AuthFilter를 Bean으로 등록하는 메서드
+   * @return : AuthFilter 객체 반환
+   */
+  @Bean
+  public AuthFilter authFilter() {
+    return new AuthFilter();
   }
 
   /**

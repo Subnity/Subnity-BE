@@ -7,8 +7,6 @@ import com.subnity.security.GoogleUser;
 import com.subnity.security.dto.JwtClaimsDto;
 import com.subnity.security.utils.JwtUtils;
 import com.subnity.security.utils.RedisUtils;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +32,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     HttpServletRequest request,
     HttpServletResponse response,
     Authentication authentication
-  ) throws IOException, ServletException {
+  ) throws IOException {
     GoogleUser user = (GoogleUser) authentication.getPrincipal();
     Role role = Role.valueOf(user.getAuthorities().iterator().next().getAuthority());
     Member findMember = memberRepository.findById(user.getId()).orElse(null);
@@ -71,15 +69,19 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     // Redis에 Refresh Token 저장
     RedisUtils.save(refreshToken);
 
-    // 쿠키
-    Cookie token = new Cookie("AT", accessToken);
-    token.setHttpOnly(true);
-    token.setSecure(true);
-    token.setPath("/");
-    token.setMaxAge(3600);
+    response.setContentType("text/html;charset=UTF-8");
+    response.getWriter().write(
+      String.format(
+        """
+          <script>
+            window.opener.postMessage({ accessToken: '%s' }, '%s');
+            window.close();
+          </script>
+        """,
+        accessToken, siteUrl
+      )
+    );
 
-    response.addCookie(token);
-    response.sendRedirect(siteUrl);
-    log.info("구글 로그인 성공!");
+    log.info("Google Login Success!!");
   }
 }
