@@ -6,6 +6,7 @@ import com.subnity.enum_api.service.EnumService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,8 @@ public class EnumController {
 
   @GetMapping(value = "/subscription-status")
   @Operation(summary = "구독 상태", description = "구독 상태 Enum 목록 조회")
-  public ApiResponse<GetEnumResponse> getSubscrStatusEnumList() {
+  public ApiResponse<GetEnumResponse> getSubscrStatusEnumList(SecurityContext securityContext) {
+    System.out.println(securityContext.getAuthentication().getName());
     return ApiResponse.onSuccess(enumService.getSubscrStatusEnumList());
   }
 

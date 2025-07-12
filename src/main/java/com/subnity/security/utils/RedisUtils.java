@@ -21,7 +21,7 @@ public class RedisUtils {
 
   public static void save(String token) {
     String memberId = JwtUtils.getMemberId(token);
-    redisTemplate.opsForValue().set("rf-" + memberId, token, Duration.ofSeconds(2628000));
+    redisTemplate.opsForValue().set("rf-" + memberId, token, Duration.ofSeconds(120));
   }
 
   public static String get(String token) {

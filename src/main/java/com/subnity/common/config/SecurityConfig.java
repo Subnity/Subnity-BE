@@ -41,7 +41,7 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/enum/**", "/login/**"
+        "/health", "/test/**", "/login/**"
       ).permitAll()
       .requestMatchers( // Swagger 관련 Url 처리
         "/v1/api-docs",

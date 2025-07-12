@@ -4,9 +4,11 @@ import com.subnity.domain.member.Member;
 import com.subnity.domain.member.enums.Role;
 import com.subnity.domain.member.repository.MemberRepository;
 import com.subnity.security.GoogleUser;
+import com.subnity.security.dto.JwtBuilder;
 import com.subnity.security.dto.JwtClaimsDto;
 import com.subnity.security.utils.JwtUtils;
 import com.subnity.security.utils.RedisUtils;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -59,17 +61,24 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     JwtClaimsDto jwtClaimsDto = JwtClaimsDto.builder()
       .memberId(user.getId())
-      .memberName(user.getName())
       .role(role)
       .build();
 
-    String accessToken = JwtUtils.createAccessToken(jwtClaimsDto);
-    String refreshToken = JwtUtils.createRefreshToken(jwtClaimsDto);
+    JwtBuilder jwtDto = JwtUtils.createToken(jwtClaimsDto);
 
     // Redis에 Refresh Token 저장
-    RedisUtils.save(refreshToken);
+    RedisUtils.save(jwtDto.getRefreshToken());
 
+    Cookie refreshTokenCookie = new Cookie("RT", jwtDto.getRefreshToken());
+    refreshTokenCookie.setPath("/");
+    refreshTokenCookie.setHttpOnly(true);
+    refreshTokenCookie.setSecure(true);
+    refreshTokenCookie.setMaxAge(3600);
+
+    response.addCookie(refreshTokenCookie);
     response.setContentType("text/html;charset=UTF-8");
+
+    // React 사용할 시 코드 수정
     response.getWriter().write(
       String.format(
         """
@@ -78,7 +87,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             window.close();
           </script>
         """,
-        accessToken, siteUrl
+        jwtDto.getAccessToken(), siteUrl
       )
     );
 

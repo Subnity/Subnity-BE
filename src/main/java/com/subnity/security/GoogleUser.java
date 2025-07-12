@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.*;
@@ -25,15 +26,7 @@ public class GoogleUser implements OAuth2User {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    Collection<GrantedAuthority> authorityList = new ArrayList<>();
-    authorityList.add(new GrantedAuthority() {
-      @Override
-      public String getAuthority() {
-        return Role.USER.name();
-      }
-    });
-
-    return authorityList;
+    return List.of(new SimpleGrantedAuthority(Role.USER.name()));
   }
 
   @Override

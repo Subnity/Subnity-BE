@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JwtClaimsDto {
   private String memberId;
-  private String memberName;
   private Role role;
 }

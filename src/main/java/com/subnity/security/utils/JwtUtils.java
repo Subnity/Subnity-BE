@@ -1,5 +1,6 @@
 package com.subnity.security.utils;
 
+import com.subnity.security.dto.JwtBuilder;
 import com.subnity.security.dto.JwtClaimsDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -30,34 +31,36 @@ public class JwtUtils {
     claims = Jwts.claims();
   }
 
-  public static String createAccessToken(JwtClaimsDto dto) {
+  public static JwtBuilder createToken(JwtClaimsDto dto) {
     claims.put("id", dto.getMemberId());
-    claims.put("name", dto.getMemberName());
     claims.put("role", dto.getRole().name());
 
-    return Jwts.builder()
+    Date now = new Date(System.currentTimeMillis());
+    Date accessExpirationDate = new Date(System.currentTimeMillis() + (60 * 1000));
+    Date refreshExpirationDate = new Date(System.currentTimeMillis() + (120 * 1000));
+
+    String accessToken = Jwts.builder()
       .setHeaderParam("typ", "JWT")
       .setHeaderParam("alg", "HS256")
       .addClaims(claims)
-      .setIssuedAt(new Date(System.currentTimeMillis()))
-      .setExpiration(new Date(System.currentTimeMillis() + (1209600 * 1000)))
+      .setIssuedAt(now)
+      .setExpiration(accessExpirationDate)
       .signWith(secretKey)
       .compact();
-  }
 
-  public static String createRefreshToken(JwtClaimsDto dto) {
-    claims.put("id", dto.getMemberId());
-    claims.put("name", dto.getMemberName());
-    claims.put("role", dto.getRole().name());
-
-    return Jwts.builder()
+    String refreshToken = Jwts.builder()
       .setHeaderParam("typ", "JWT")
       .setHeaderParam("alg", "HS256")
       .addClaims(claims)
-      .setIssuedAt(new Date(System.currentTimeMillis()))
-      .setExpiration(new Date(System.currentTimeMillis() + (2628000L * 1000)))
+      .setIssuedAt(now)
+      .setExpiration(refreshExpirationDate)
       .signWith(secretKey)
       .compact();
+
+    return JwtBuilder.builder()
+      .accessToken(accessToken)
+      .refreshToken(refreshToken)
+      .build();
   }
 
   // 유저 아이디 가져오기
@@ -90,16 +93,19 @@ public class JwtUtils {
   // 만료 시간 확인
   public static boolean getValidateToken(String token) {
     try {
-      Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+      Jwts.parserBuilder()
+        .setSigningKey(secretKey)
+        .build()
+        .parseClaimsJws(token);
       return true;
     } catch (MalformedJwtException e) {
-      log.error("잘못된 JWT 토큰 -> ", e);
+      log.error("잘못된 JWT 토큰 > {}", e.getMessage());
     } catch (ExpiredJwtException e) {
-      log.error("만료된 JWT 토큰 -> ", e);
+      log.error("만료된 JWT 토큰 > {}", e.getMessage());
     } catch (UnsupportedJwtException e) {
-      log.error("지원되지 않는 JWT 토큰 -> ", e);
+      log.error("지원되지 않는 JWT 토큰 > {}", e.getMessage());
     } catch (IllegalArgumentException e) {
-      log.error("JWT 주장 문자열이 비어 있습니다 -> ", e);
+      log.error("JWT 주장 문자열이 비어 있습니다 > {}", e.getMessage());
     }
 
     return false;
