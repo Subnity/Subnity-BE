@@ -1,6 +1,6 @@
 package com.subnity.common.config;
 
-import com.subnity.security.OAuth2Service;
+import com.subnity.security.service.OAuth2Service;
 import com.subnity.security.filter.AuthFilter;
 import com.subnity.security.handler.AuthFailureHandler;
 import com.subnity.security.handler.AuthSuccessHandler;
