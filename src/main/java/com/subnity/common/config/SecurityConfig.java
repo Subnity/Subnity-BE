@@ -54,6 +54,13 @@ public class SecurityConfig {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
         "/health", "/test/**", "/login/**", "/enum/**"
       ).permitAll()
+      .requestMatchers(
+        "/favicon.ico",
+        "/css/**",
+        "/js/**",
+        "/images/**"
+      )
+      .permitAll()
       .requestMatchers( // Swagger 관련 Url 처리
         "/v1/api-docs",
         "/v1/swagger-ui/**",
