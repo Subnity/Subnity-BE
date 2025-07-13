@@ -1,5 +1,6 @@
 package com.subnity.common.config;
 
+import com.subnity.auth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.subnity.auth.service.OAuth2Service;
 import com.subnity.auth.filter.AuthFilter;
 import com.subnity.auth.handler.AuthFailureHandler;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -33,6 +36,11 @@ public class SecurityConfig {
   @Bean
   public AuthFilter authFilter() {
     return new AuthFilter();
+  }
+
+  @Bean
+  public AuthorizationRequestRepository<OAuth2AuthorizationRequest> cookieOAuth2AuthorizationRequestRepository() {
+    return new HttpCookieOAuth2AuthorizationRequestRepository();
   }
 
   /**
@@ -76,7 +84,10 @@ public class SecurityConfig {
       oauth2Config.loginPage("/login")
         .userInfoEndpoint(e -> e.userService(oAuth2Service))
         .successHandler(successHandler)
-        .failureHandler(failureHandler);
+        .failureHandler(failureHandler)
+        .authorizationEndpoint(authConfig -> {
+          authConfig.authorizationRequestRepository(cookieOAuth2AuthorizationRequestRepository());
+        });
     });
 
     http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
