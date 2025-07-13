@@ -76,9 +76,13 @@
             window.open("http://localhost:8080/oauth2/authorization/google", "popup", "width=500,height=600");
             window.addEventListener("message", (event) => {
                 const { accessToken } = event.data;
-                if (accessToken) {
+
+                if (accessToken === undefined) {
+                    localStorage.clear();
+                    console.log("로그인 실패");
+                } else {
                     localStorage.setItem("UT", accessToken);
-                    console.log("로그인 성공!!");
+                    console.log("로그인 성공");
                 }
             });
         }

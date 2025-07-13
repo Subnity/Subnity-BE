@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,6 +22,15 @@ public class SecurityConfig {
   private final OAuth2Service oAuth2Service;
   private final AuthSuccessHandler successHandler;
   private final AuthFailureHandler failureHandler;
+
+  /**
+   * AuthFilter를 Bean으로 등록하는 메서드
+   * @return : AuthFilter 객체 반환
+   */
+  @Bean
+  public AuthFilter authFilter() {
+    return new AuthFilter();
+  }
 
   /**
    * SecurityFilterChain 설정
@@ -41,7 +49,7 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/login/**"
+        "/health", "/test/**", "/login/**", "/auth/refresh"
       ).permitAll()
       .requestMatchers( // Swagger 관련 Url 처리
         "/v1/api-docs",
@@ -54,8 +62,8 @@ public class SecurityConfig {
     });
 
     // OAuth2 클래스 구성 완료 후 주석 제거
-    http.oauth2Login(oauth2LoginConfig -> {
-      oauth2LoginConfig.loginPage("/login")
+    http.oauth2Login(oauth2Config -> {
+      oauth2Config.loginPage("/login")
         .userInfoEndpoint(e -> e.userService(oAuth2Service))
         .successHandler(successHandler)
         .failureHandler(failureHandler);
@@ -64,23 +72,5 @@ public class SecurityConfig {
     http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
-  }
-
-  /**
-   * AuthFilter를 Bean으로 등록하는 메서드
-   * @return : AuthFilter 객체 반환
-   */
-  @Bean
-  public AuthFilter authFilter() {
-    return new AuthFilter();
-  }
-
-  /**
-   * 비밀번호 BCrypt 암호화 Bean
-   * @return : BCrypt 암호화 인코더 반환
-   */
-  @Bean
-  public BCryptPasswordEncoder bCryptPasswordEncoder() {
-    return new BCryptPasswordEncoder();
   }
 }

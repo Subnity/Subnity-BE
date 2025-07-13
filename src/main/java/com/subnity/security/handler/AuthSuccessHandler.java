@@ -70,10 +70,8 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     RedisUtils.save(jwtDto.getRefreshToken());
 
     Cookie refreshTokenCookie = new Cookie("RT", jwtDto.getRefreshToken());
-    refreshTokenCookie.setPath("/");
-    refreshTokenCookie.setHttpOnly(true);
-    refreshTokenCookie.setSecure(true);
     refreshTokenCookie.setMaxAge(3600);
+    refreshTokenCookie.setPath("/");
 
     response.addCookie(refreshTokenCookie);
     response.setContentType("text/html;charset=UTF-8");
@@ -91,6 +89,6 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
       )
     );
 
-    log.info("Google Login Success!!");
+    log.info("구글 로그인 성공");
   }
 }

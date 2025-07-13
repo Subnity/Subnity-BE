@@ -1,5 +1,7 @@
 package com.subnity.security.utils;
 
+import com.subnity.common.api_response.exception.GeneralException;
+import com.subnity.common.api_response.status.ErrorStatus;
 import com.subnity.security.dto.JwtBuilder;
 import com.subnity.security.dto.JwtClaimsDto;
 import io.jsonwebtoken.*;
@@ -31,6 +33,11 @@ public class JwtUtils {
     claims = Jwts.claims();
   }
 
+  /**
+   * Access Token과 Refresh Token 생성 메서드
+   * @param dto : Jwt Claims 정보
+   * @return : JwtBuilder 객체 반환
+   */
   public static JwtBuilder createToken(JwtClaimsDto dto) {
     claims.put("id", dto.getMemberId());
     claims.put("role", dto.getRole().name());
@@ -63,34 +70,47 @@ public class JwtUtils {
       .build();
   }
 
-  // 유저 아이디 가져오기
+  /**
+   * 회원 ID 얻는 메서드
+   * @param token : 토큰
+   * @return : 회원 ID 반환
+   */
   public static String getMemberId(String token) {
     try {
-      return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("id", String.class);
+      return Jwts.parserBuilder()
+        .setSigningKey(secretKey)
+        .build()
+        .parseClaimsJws(token)
+        .getBody()
+        .get("id", String.class);
     } catch (ExpiredJwtException e) {
-      return e.getClaims().get("id", String.class);
+      throw new GeneralException(ErrorStatus.TOKEN_EXPIRED, "만료된 토큰입니다.");
     }
   }
 
-  // 유저 이름 가져오기
-  public static String getMemberName(String token) {
-    try {
-      return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("name", String.class);
-    } catch (ExpiredJwtException e) {
-      return e.getClaims().get("name", String.class);
-    }
-  }
-
-  // 권한 가져오기
+  /**
+   * 권한 얻는 메서드
+   * @param token : 토큰
+   * @return : 회원 권한 반환
+   */
   public static String getRole(String token) {
     try {
-      return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("role", String.class);
+      return Jwts.parserBuilder()
+        .setSigningKey(secretKey)
+        .build()
+        .parseClaimsJws(token)
+        .getBody()
+        .get("role", String.class);
     } catch (ExpiredJwtException e) {
-      return e.getClaims().get("role", String.class);
+      throw new GeneralException(ErrorStatus.TOKEN_EXPIRED, "만료된 토큰입니다.");
     }
   }
 
-  // 만료 시간 확인
+  /**
+   * 토큰의 만료 시간 확인 메서드
+   * @param token : 토큰
+   * @return : 만료 여부 반환
+   */
   public static boolean getValidateToken(String token) {
     try {
       Jwts.parserBuilder()
@@ -105,7 +125,7 @@ public class JwtUtils {
     } catch (UnsupportedJwtException e) {
       log.error("지원되지 않는 JWT 토큰 > {}", e.getMessage());
     } catch (IllegalArgumentException e) {
-      log.error("JWT 주장 문자열이 비어 있습니다 > {}", e.getMessage());
+      log.error("JWT 문자열이 비어 있습니다 > {}", e.getMessage());
     }
 
     return false;

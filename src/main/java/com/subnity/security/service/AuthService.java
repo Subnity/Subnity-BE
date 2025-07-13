@@ -1,38 +1,44 @@
 package com.subnity.security.service;
 
+import com.subnity.common.api_response.exception.GeneralException;
+import com.subnity.common.api_response.status.ErrorStatus;
 import com.subnity.domain.member.enums.Role;
 import com.subnity.security.dto.JwtBuilder;
 import com.subnity.security.dto.JwtClaimsDto;
 import com.subnity.security.utils.JwtUtils;
 import com.subnity.security.utils.RedisUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-  public String recreateAccessToken(HttpServletRequest request) {
-    String authHeader = request.getHeader("Authorization");
+  /**
+   * Access Token 재발급 메서드
+   *
+   * @param token : 쿠키에 있는 Refresh Token
+   * @return : 재발급된 Access Token 반환 | 예외 발생시 400 코드 반환
+   */
+  public String recreateAccessToken(String token) {
+    String refreshToken = RedisUtils.get(token);
 
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
-      String token = authHeader.split("Bearer ")[1];
-      String refreshToken = RedisUtils.get(token);
-
-      if (refreshToken != null && JwtUtils.getValidateToken(refreshToken)) {
-        String memberId = JwtUtils.getMemberId(refreshToken);
-        String role = JwtUtils.getRole(refreshToken);
-
-        JwtBuilder jwtDto = JwtUtils.createToken(
-          JwtClaimsDto.builder()
-            .memberId(memberId)
-            .role(Role.valueOf(role))
-            .build()
-        );
-
-        return jwtDto.getAccessToken();
-      }
+    if (token != null && refreshToken != null && !token.equals(refreshToken)) {
+      throw new GeneralException(ErrorStatus.UNAUTHORIZED, "잘못된 토큰입니다.");
     }
 
-    return null;
+    if (refreshToken != null && JwtUtils.getValidateToken(refreshToken)) {
+      String memberId = JwtUtils.getMemberId(refreshToken);
+      String role = JwtUtils.getRole(refreshToken);
+
+      JwtBuilder jwtDto = JwtUtils.createToken(
+        JwtClaimsDto.builder()
+          .memberId(memberId)
+          .role(Role.valueOf(role))
+          .build()
+      );
+
+      return jwtDto.getAccessToken();
+    } else { // 토큰의 유효 시간이 지났을 경우
+      throw new GeneralException(ErrorStatus.TOKEN_EXPIRED, "만료된 토큰입니다.");
+    }
   }
 }

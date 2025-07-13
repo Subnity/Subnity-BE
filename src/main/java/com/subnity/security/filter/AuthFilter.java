@@ -21,14 +21,24 @@ import java.util.List;
 @Slf4j
 public class AuthFilter extends OncePerRequestFilter {
 
+  private final List<String> EXCLUDE_URLS = List.of(
+    "/auth/refresh"
+  );
+
   @Override
   protected void doFilterInternal(
     @NonNull HttpServletRequest request,
     @NonNull HttpServletResponse response,
     @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
-    String authHeader = request.getHeader("Authorization");
+    for (String uri : EXCLUDE_URLS) {
+      if (request.getRequestURI().equals(uri)) {
+        filterChain.doFilter(request, response);
+        return;
+      }
+    }
 
+    String authHeader = request.getHeader("Authorization");
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
       String token = authHeader.split("Bearer ")[1];
 
