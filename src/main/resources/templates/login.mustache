@@ -73,7 +73,7 @@
 
     <script>
         function getLoginPopup() {
-            window.open("http://localhost:8080/oauth2/authorization/google", "popup", "width=500,height=600");
+            window.open(`${window.location.origin}/oauth2/authorization/google`, "popup", "width=500,height=600");
             window.addEventListener("message", (event) => {
                 const { accessToken } = event.data;
 
