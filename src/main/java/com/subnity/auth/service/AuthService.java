@@ -1,20 +1,22 @@
-package com.subnity.security.service;
+package com.subnity.auth.service;
 
 import com.subnity.common.api_response.exception.GeneralException;
 import com.subnity.common.api_response.status.ErrorStatus;
 import com.subnity.domain.member.enums.Role;
-import com.subnity.security.dto.JwtBuilder;
-import com.subnity.security.dto.JwtClaimsDto;
-import com.subnity.security.utils.JwtUtils;
-import com.subnity.security.utils.RedisUtils;
+import com.subnity.auth.dto.JwtBuilder;
+import com.subnity.auth.dto.JwtClaimsDto;
+import com.subnity.auth.utils.JwtUtils;
+import com.subnity.auth.utils.RedisUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * AuthService : 인증 관련 서비스 클래스
+ */
 @Service
 public class AuthService {
 
   /**
    * Access Token 재발급 메서드
-   *
    * @param token : 쿠키에 있는 Refresh Token
    * @return : 재발급된 Access Token 반환 | 예외 발생시 400 코드 반환
    */

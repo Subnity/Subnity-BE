@@ -1,9 +1,9 @@
 package com.subnity.common.config;
 
-import com.subnity.security.service.OAuth2Service;
-import com.subnity.security.filter.AuthFilter;
-import com.subnity.security.handler.AuthFailureHandler;
-import com.subnity.security.handler.AuthSuccessHandler;
+import com.subnity.auth.service.OAuth2Service;
+import com.subnity.auth.filter.AuthFilter;
+import com.subnity.auth.handler.AuthFailureHandler;
+import com.subnity.auth.handler.AuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * SecurityConfig : Spring Security 설정 파일
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class SecurityConfig {
   }
 
   /**
-   * SecurityFilterChain 설정
+   * SecurityFilterChain 설정 메서드
    * @param http : HttpSecurity 객체
    * @return : HttpSecurity 객체 반환
    * @throws Exception : 예외 처리
@@ -49,7 +52,7 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/login/**", "/auth/refresh"
+        "/health", "/test/**", "/login/**", "/enum/**"
       ).permitAll()
       .requestMatchers( // Swagger 관련 Url 처리
         "/v1/api-docs",
@@ -61,7 +64,7 @@ public class SecurityConfig {
       .anyRequest().authenticated();
     });
 
-    // OAuth2 클래스 구성 완료 후 주석 제거
+    // OAuth2 인증
     http.oauth2Login(oauth2Config -> {
       oauth2Config.loginPage("/login")
         .userInfoEndpoint(e -> e.userService(oAuth2Service))

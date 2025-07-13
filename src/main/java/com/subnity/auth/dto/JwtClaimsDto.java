@@ -1,4 +1,4 @@
-package com.subnity.security.dto;
+package com.subnity.auth.dto;
 
 import com.subnity.domain.member.enums.Role;
 import lombok.AllArgsConstructor;

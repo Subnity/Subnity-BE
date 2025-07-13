@@ -1,13 +1,13 @@
-package com.subnity.security.handler;
+package com.subnity.auth.handler;
 
 import com.subnity.domain.member.Member;
 import com.subnity.domain.member.enums.Role;
 import com.subnity.domain.member.repository.MemberRepository;
-import com.subnity.security.GoogleUser;
-import com.subnity.security.dto.JwtBuilder;
-import com.subnity.security.dto.JwtClaimsDto;
-import com.subnity.security.utils.JwtUtils;
-import com.subnity.security.utils.RedisUtils;
+import com.subnity.auth.GoogleUser;
+import com.subnity.auth.dto.JwtBuilder;
+import com.subnity.auth.dto.JwtClaimsDto;
+import com.subnity.auth.utils.JwtUtils;
+import com.subnity.auth.utils.RedisUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +20,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * AuthSuccessHandler : OAuth2 인증에 성공할 경우 호출될 핸들러
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +32,13 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   @Value("${server.site_url}")
   private String siteUrl;
 
+  /**
+   * OAuth2 인증에 성공할 경우 실행될 메서드
+   * @param request : HttpServletRequest 객체
+   * @param response : HttpServletResponse 객체
+   * @param authentication 인증에 성공한 회원 정보
+   * @throws IOException : 예외
+   */
   @Override
   public void onAuthenticationSuccess(
     HttpServletRequest request,
@@ -39,6 +49,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     Role role = Role.valueOf(user.getAuthorities().iterator().next().getAuthority());
     Member findMember = memberRepository.findById(user.getId()).orElse(null);
 
+    // 이미 로그인한 회원이 존재하는지 여부
     if (findMember != null) {
       memberRepository.save(
         findMember.toBuilder()
@@ -76,7 +87,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     response.addCookie(refreshTokenCookie);
     response.setContentType("text/html;charset=UTF-8");
 
-    // React 사용할 시 코드 수정
+    // React 사용할 시 코드 수정 필요
     response.getWriter().write(
       String.format(
         """

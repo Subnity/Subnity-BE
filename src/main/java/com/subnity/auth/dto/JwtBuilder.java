@@ -1,4 +1,4 @@
-package com.subnity.security.dto;
+package com.subnity.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;

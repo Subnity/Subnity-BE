@@ -1,9 +1,9 @@
-package com.subnity.security.utils;
+package com.subnity.auth.utils;
 
 import com.subnity.common.api_response.exception.GeneralException;
 import com.subnity.common.api_response.status.ErrorStatus;
-import com.subnity.security.dto.JwtBuilder;
-import com.subnity.security.dto.JwtClaimsDto;
+import com.subnity.auth.dto.JwtBuilder;
+import com.subnity.auth.dto.JwtClaimsDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -16,6 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * JwtUtils : Jwt 관련 서비스를 모아둔 유틸 클래스
+ */
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -89,7 +92,7 @@ public class JwtUtils {
   }
 
   /**
-   * 권한 얻는 메서드
+   * 회원 권한 얻는 메서드
    * @param token : 토큰
    * @return : 회원 권한 반환
    */

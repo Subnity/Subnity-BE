@@ -1,6 +1,5 @@
 server:
   site_url: ${SITE_URL}
-  port: 8080
 
 springdoc:
   swagger-ui:

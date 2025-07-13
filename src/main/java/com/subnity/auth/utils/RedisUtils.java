@@ -1,4 +1,4 @@
-package com.subnity.security.utils;
+package com.subnity.auth.utils;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+/**
+ * RedisUtils : Redis 관련 서비스를 모아둔 유틸 클래스
+ */
 @Component
 @RequiredArgsConstructor
 public class RedisUtils {
@@ -19,16 +22,29 @@ public class RedisUtils {
     redisTemplate = this.nonRedisTemplate;
   }
 
+  /**
+   * Redis에 Refresh Token을 저장하는 메서드
+   * @param token : Access Token
+   */
   public static void save(String token) {
     String memberId = JwtUtils.getMemberId(token);
     redisTemplate.opsForValue().set("rf-" + memberId, token, Duration.ofSeconds(120));
   }
 
+  /**
+   * Redis에서 Refresh Token을 얻는 메서드
+   * @param token : Access Token
+   * @return : Refresh Token 반환
+   */
   public static String get(String token) {
     String memberId = JwtUtils.getMemberId(token);
     return (String) redisTemplate.opsForValue().get("rf-" + memberId);
   }
 
+  /**
+   * Refresh Token을 Redis에서 제거하는 메서드
+   * @param token : Access Token
+   */
   public static void delete(String token) {
     String memberId = JwtUtils.getMemberId(token);
     redisTemplate.delete("rf-" + memberId);
