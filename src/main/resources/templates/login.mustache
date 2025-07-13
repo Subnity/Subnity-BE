@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>구글 로그인 페이지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #cfe0fc, #d1c4e9);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            animation: fade-in 0.5s ease-out forwards;
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background-color: white;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem 10rem;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .login-btn:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-btn img {
+            width: 20px;
+            height: 20px;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <button class="login-btn" onclick="getLoginPopup()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo">로그인
+        </button>
+    </div>
+
+    <script>
+        function getLoginPopup() {
+            window.open(`${window.location.origin}/oauth2/authorization/google`, "popup", "width=500,height=600");
+            window.addEventListener("message", (event) => {
+                const { accessToken } = event.data;
+
+                if (accessToken === undefined) {
+                    localStorage.clear();
+                    console.log("로그인 실패");
+                } else {
+                    localStorage.setItem("UT", accessToken);
+                    console.log("로그인 성공");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

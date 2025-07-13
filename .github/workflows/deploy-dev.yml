@@ -1,6 +1,9 @@
 name: Subnity CI/CD Dev
 
 on:
+#  push:
+#    branches:
+#      - feat/#18-oauthLogin
   pull_request:
     types: [ closed ]
   workflow_dispatch: # 수동 실행이 가능하도록 설정

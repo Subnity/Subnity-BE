@@ -1,3 +1,10 @@
+server:
+  site_url: ${SITE_URL_DEV}
+
+springdoc:
+  swagger-ui:
+    path: ${API_DOCS_PATH}
+
 spring:
   config:
     activate:
@@ -16,3 +23,23 @@ spring:
       host: ${REDIS_HOST_DEV}
       repositories:
         enabled: false
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-name: google
+            client-id: ${GOOGLE_CLIENT_ID_DEV}
+            client-secret: ${GOOGLE_SECRET_KEY_DEV}
+            redirect-uri: ${REDIRECT_URL_DEV}
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
+              - https://www.googleapis.com/auth/gmail.readonly # Gmail 읽기 권한
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo

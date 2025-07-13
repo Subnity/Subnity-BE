@@ -1,6 +1,10 @@
-springdoc:
-  swagger-ui:
-    path: ${API_DOCS_PATH}
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
+        http-only: true
 
 spring:
   servlet:
@@ -13,13 +17,13 @@ spring:
     open-in-view: false
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
 
 jwt:
-  secret-key: ${JWT}
+  secret: ${JWT}
 
 crypto:
   private-key: ${CRYPTO_PRIVATE_KEY}
