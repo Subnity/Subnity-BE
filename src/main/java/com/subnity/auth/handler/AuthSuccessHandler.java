@@ -81,7 +81,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     RedisUtils.save(jwtDto.getRefreshToken());
 
     Cookie refreshTokenCookie = new Cookie("RT", jwtDto.getRefreshToken());
-    refreshTokenCookie.setMaxAge(3600);
+    refreshTokenCookie.setMaxAge(605000);
     refreshTokenCookie.setPath("/");
 
     response.addCookie(refreshTokenCookie);

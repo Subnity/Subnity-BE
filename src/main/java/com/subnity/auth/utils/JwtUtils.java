@@ -46,8 +46,8 @@ public class JwtUtils {
     claims.put("role", dto.getRole().name());
 
     Date now = new Date(System.currentTimeMillis());
-    Date accessExpirationDate = new Date(System.currentTimeMillis() + (60 * 1000));
-    Date refreshExpirationDate = new Date(System.currentTimeMillis() + (120 * 1000));
+    Date accessExpirationDate = new Date(System.currentTimeMillis() + (86400 * 1000));
+    Date refreshExpirationDate = new Date(System.currentTimeMillis() + (604800 * 1000));
 
     String accessToken = Jwts.builder()
       .setHeaderParam("typ", "JWT")
