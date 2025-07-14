@@ -1,5 +1,6 @@
 package com.subnity.auth.service;
 
+import com.subnity.auth.utils.SecurityUtils;
 import com.subnity.common.api_response.exception.GeneralException;
 import com.subnity.common.api_response.status.ErrorStatus;
 import com.subnity.domain.member.enums.Role;
@@ -42,5 +43,13 @@ public class AuthService {
     } else { // 토큰의 유효 시간이 지났을 경우
       throw new GeneralException(ErrorStatus.TOKEN_EXPIRED, "만료된 토큰입니다.");
     }
+  }
+
+  /**
+   * Redis에 있는 Refresh Token을 제거하는 메서드 (로그아웃)
+   */
+  public void logout() {
+    String memberId = SecurityUtils.getAuthMemberId();
+    RedisUtils.delete(memberId);
   }
 }
