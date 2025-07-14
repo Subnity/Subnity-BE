@@ -3,8 +3,8 @@ package com.subnity.enum_api.service;
 import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.common.utils.enums.SubscrStatus;
 import com.subnity.domain.subscription.enums.PaymentCycle;
-import com.subnity.enum_api.controller.response.GetEnumListDto;
-import com.subnity.enum_api.controller.response.GetEnumResponse;
+import com.subnity.enum_api.controller.response.ListEnumDto;
+import com.subnity.enum_api.controller.response.ListEnumResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,16 +17,16 @@ public class EnumService {
    * SubscrCategory Enum 목록 조회
    * @return : SubscrCategory Enum 응답 객체 반환
    */
-  public GetEnumResponse getSubscrCategoryEnumList() {
-    List<GetEnumListDto> enumList = Stream.of(SubscrCategory.values())
+  public ListEnumResponse getSubscrCategoryEnumList() {
+    List<ListEnumDto> enumList = Stream.of(SubscrCategory.values())
       .map(e ->
-        GetEnumListDto.builder()
+        ListEnumDto.builder()
           .code(e.name())
           .value(e.getValue())
           .build()
       ).toList();
 
-    return GetEnumResponse.builder()
+    return ListEnumResponse.builder()
       .enumList(enumList)
       .build();
   }
@@ -35,16 +35,16 @@ public class EnumService {
    * PaymentCycle Enum 목록 조회
    * @return : PaymentCycle Enum 응답 객체 반환
    */
-  public GetEnumResponse getPaymentCycleEnumList() {
-    List<GetEnumListDto> enumList = Stream.of(PaymentCycle.values())
+  public ListEnumResponse getPaymentCycleEnumList() {
+    List<ListEnumDto> enumList = Stream.of(PaymentCycle.values())
       .map(e ->
-        GetEnumListDto.builder()
+        ListEnumDto.builder()
           .code(e.name())
           .value(e.getValue())
           .build()
       ).toList();
 
-    return GetEnumResponse.builder()
+    return ListEnumResponse.builder()
       .enumList(enumList)
       .build();
   }
@@ -53,16 +53,16 @@ public class EnumService {
    * SubscrStatus Enum 목록 조회
    * @return : SubscrStatus Enum 응답 객체 반환
    */
-  public GetEnumResponse getSubscrStatusEnumList() {
-    List<GetEnumListDto> enumList = Stream.of(SubscrStatus.values())
+  public ListEnumResponse getSubscrStatusEnumList() {
+    List<ListEnumDto> enumList = Stream.of(SubscrStatus.values())
       .map(e ->
-        GetEnumListDto.builder()
+        ListEnumDto.builder()
           .code(e.name())
           .value(e.getValue())
           .build()
       ).toList();
 
-    return GetEnumResponse.builder()
+    return ListEnumResponse.builder()
       .enumList(enumList)
       .build();
   }
