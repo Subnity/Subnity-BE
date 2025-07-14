@@ -60,7 +60,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
       memberRepository.save(
         Member.builder()
           .memberId(user.getId())
-          .nickName(user.getName())
+          .name(user.getName())
           .role(role)
           .profileUrl("") // 추후에 추가 예정
           .isNotification(true)
