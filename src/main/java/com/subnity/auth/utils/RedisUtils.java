@@ -43,10 +43,9 @@ public class RedisUtils {
 
   /**
    * Refresh Token을 Redis에서 제거하는 메서드
-   * @param token : Access Token
+   * @param memberId : 인증된 회원 ID
    */
-  public static void delete(String token) {
-    String memberId = JwtUtils.getMemberId(token);
+  public static void delete(String memberId) {
     redisTemplate.delete("rf-" + memberId);
   }
 }

@@ -35,4 +35,16 @@ public class AuthController {
         .build()
     );
   }
+
+  /**
+   * Refresh Token 제거 엔드포인트 (로그아웃)
+   * @return : 공통 응답 객체 반환
+   */
+  @GetMapping(value = "/logout")
+  @Operation(summary = "로그아웃", description = "Redis에 저장된 Refresh Token을 제거하는 엔드포인트</br>" +
+    "* 쿠키나 로컬 스토리지에 있는 Access Token 및 Refresh Token은 프론트에서 제거")
+  public ApiResponse<Void> logout() {
+    authService.logout();
+    return ApiResponse.onSuccess();
+  }
 }
