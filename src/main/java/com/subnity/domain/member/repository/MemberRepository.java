@@ -45,11 +45,12 @@ public class MemberRepository {
    * @param request : 회원 정보 수정 요청 객체
    */
   @Transactional
-  public void update(UpdateMemberRequest request) {
+  public void update(UpdateMemberRequest request, String memberId) {
     queryFactory.update(member)
       .set(member.name, request.name())
       .set(member.profileUrl, request.profileUrl())
       .set(member.isNotification, request.isNotification())
+      .where(member.memberId.eq(memberId))
       .execute();
   }
 }

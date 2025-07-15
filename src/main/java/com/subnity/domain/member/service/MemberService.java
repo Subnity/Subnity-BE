@@ -31,7 +31,8 @@ public class MemberService {
    * @param request : 회원 수정 요청 객체
    */
   public void updateMember(UpdateMemberRequest request) {
-    memberRepository.update(request);
+    String memberId = SecurityUtils.getAuthMemberId();
+    memberRepository.update(request, memberId);
   }
 
   /**
