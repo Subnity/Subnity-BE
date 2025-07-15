@@ -2,12 +2,12 @@ package com.subnity.auth.handler;
 
 import com.subnity.domain.member.Member;
 import com.subnity.domain.member.enums.Role;
-import com.subnity.domain.member.repository.MemberRepository;
 import com.subnity.auth.GoogleUser;
 import com.subnity.auth.dto.JwtBuilder;
 import com.subnity.auth.dto.JwtClaimsDto;
 import com.subnity.auth.utils.JwtUtils;
 import com.subnity.auth.utils.RedisUtils;
+import com.subnity.domain.member.repository.JpaMemberRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-  private final MemberRepository memberRepository;
+  private final JpaMemberRepository memberRepository;
 
   @Value("${server.site_url}")
   private String siteUrl;
