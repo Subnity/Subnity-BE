@@ -34,8 +34,8 @@ public class Subscription extends BaseTimeEntity {
   @Column(name = "description")
   private String description;
 
-  @Column(name = "expense", nullable = false)
-  private String expense;
+  @Column(name = "cost", nullable = false)
+  private String cost;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_cycle", nullable = false)
@@ -53,7 +53,7 @@ public class Subscription extends BaseTimeEntity {
   private Boolean isNotification;
 
   @Column(name = "cancelled_at")
-  private LocalDateTime cancelled_at;
+  private LocalDateTime cancelledAt;
 
   @Column(name = "last_payment_date", nullable = false)
   private LocalDateTime lastPaymentDate;

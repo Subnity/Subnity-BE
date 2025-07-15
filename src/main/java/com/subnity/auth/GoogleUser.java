@@ -54,7 +54,7 @@ public class GoogleUser implements OAuth2User {
    * @return : 회원 ID 반환
    */
   public String getId() {
-    return registrationId + "-" + attributes.get("sub").toString();
+    return "@" + registrationId + "-" + attributes.get("sub").toString();
   }
 
   /**

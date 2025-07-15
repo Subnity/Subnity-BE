@@ -25,8 +25,8 @@ public class Member extends BaseTimeEntity {
   @Column(name = "member_id")
   private String memberId;
 
-  @Column(name = "nick_name", nullable = false)
-  private String nickName;
+  @Column(name = "name", nullable = false)
+  private String name;
 
   @Column(name = "profile_url", nullable = false)
   private String profileUrl;

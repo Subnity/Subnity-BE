@@ -10,11 +10,11 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "category_expense")
-public class CategoryExpense {
+public class CategoryCost {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "category_expense_id")
+  @Column(name = "category_cost_id")
   private Long categoryExpenseId;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -25,8 +25,8 @@ public class CategoryExpense {
   @Column(name = "category", nullable = false)
   private SubscrCategory category;
 
-  @Column(name = "total_expense", nullable = false)
-  private String totalExpense;
+  @Column(name = "total_cost", nullable = false)
+  private String totalCost;
 
   @Column(name = "ratio", nullable = false)
   private String ratio;
