@@ -11,7 +11,7 @@ import com.subnity.domain.subscription_history.SubscriptionHistory;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +41,7 @@ public class Subscription extends BaseTimeEntity {
   @Column(name = "payment_cycle", nullable = false)
   private PaymentCycle paymentCycle;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "status")
   private SubscrStatus status;
 
@@ -53,13 +54,13 @@ public class Subscription extends BaseTimeEntity {
   private Boolean isNotification;
 
   @Column(name = "cancelled_at")
-  private LocalDateTime cancelledAt;
+  private LocalDate cancelledAt;
 
   @Column(name = "last_payment_date", nullable = false)
-  private LocalDateTime lastPaymentDate;
+  private LocalDate lastPaymentDate;
 
   @Column(name = "next_payment_date")
-  private LocalDateTime nextPaymentDate;
+  private LocalDate nextPaymentDate;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")

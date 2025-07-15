@@ -10,9 +10,6 @@ import java.time.LocalDate;
 @Schema(description = "구독 생성 요청 객체")
 public record CreateSubscrRequest(
 
-  @Schema(description = "구독 ID")
-  String subscriptionId,
-
   @Schema(description = "플랫폼 이름")
   String platformName,
 
