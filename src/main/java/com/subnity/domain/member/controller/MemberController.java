@@ -29,4 +29,11 @@ public class MemberController {
     memberService.updateMember(request);
     return ApiResponse.onSuccess();
   }
+
+  @DeleteMapping(value = "/delete")
+  @Operation(summary = "회원 정보 영구 삭제", description = "회원 정보(데이터) 영구 삭제하는 엔드포인트")
+  public ApiResponse<Void> deleteMember() {
+    memberService.deleteMember();
+    return ApiResponse.onSuccess();
+  }
 }
