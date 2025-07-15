@@ -10,11 +10,19 @@ import org.springframework.stereotype.Repository;
 
 import static com.subnity.domain.member.QMember.member;
 
+/**
+ * MemberRepository : QueryDSL를 사용한 회원 Repository
+ */
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {
   private final JPAQueryFactory queryFactory;
 
+  /**
+   * 회원 정보 조회 메서드
+   * @param memberId : 회원 ID
+   * @return : 회원 정보 조회 응답 객체 반환
+   */
   public GetMemberResponse findById(String memberId) {
     return queryFactory.select(
       Projections.fields(
@@ -32,6 +40,10 @@ public class MemberRepository {
     .fetchOne();
   }
 
+  /**
+   * 회원 정보 수정 메서드
+   * @param request : 회원 정보 수정 요청 객체
+   */
   @Transactional
   public void update(UpdateMemberRequest request) {
     queryFactory.update(member)

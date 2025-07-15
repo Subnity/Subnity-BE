@@ -10,6 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * MemberController : 회원 관련 Controller
+ */
 @RestController
 @RequestMapping(value = "/member")
 @RequiredArgsConstructor
@@ -17,12 +20,21 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
   private final MemberService memberService;
 
+  /**
+   * 회원 정보 조회 엔드포인트
+   * @return : 회원 정보 조회 응답 객체 반환
+   */
   @GetMapping(value = "")
   @Operation(summary = "회원 정보 조회", description = "회원 조회 엔드포인트")
   public ApiResponse<GetMemberResponse> getMember() {
     return ApiResponse.onSuccess(memberService.getMember());
   }
 
+  /**
+   * 회원 정보 부분 수정 엔드포인트
+   * @param request : 회원 수정 요청 객체
+   * @return : 응답 성공 객체 반환
+   */
   @PatchMapping(value = "/update")
   @Operation(summary = "회원 정보 수정", description = "회원 정보 수정 엔드포인트")
   public ApiResponse<GetMemberResponse> updateMember(@RequestBody @Valid UpdateMemberRequest request) {
@@ -30,6 +42,10 @@ public class MemberController {
     return ApiResponse.onSuccess();
   }
 
+  /**
+   * 회원 정보(데이터) 영구 삭제 엔드포인트
+   * @return : 응답 성공 객체 반환
+   */
   @DeleteMapping(value = "/delete")
   @Operation(summary = "회원 정보 영구 삭제", description = "회원 정보(데이터) 영구 삭제하는 엔드포인트")
   public ApiResponse<Void> deleteMember() {

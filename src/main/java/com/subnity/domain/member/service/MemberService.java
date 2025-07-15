@@ -8,21 +8,35 @@ import com.subnity.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * MemberService : 회원 관련 Service
+ */
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-  private final MemberRepository memberRepository;
   private final JpaMemberRepository jpaMemberRepository;
+  private final MemberRepository memberRepository;
 
+  /**
+   * 회원 정보 조회 메서드
+   * @return : 회원 정보 객체 반환
+   */
   public GetMemberResponse getMember() {
     String memberId = SecurityUtils.getAuthMemberId();
     return memberRepository.findById(memberId);
   }
 
+  /**
+   * 회원 정보 수정 메서드
+   * @param request : 회원 수정 요청 객체
+   */
   public void updateMember(UpdateMemberRequest request) {
     memberRepository.update(request);
   }
 
+  /**
+   * 회원 정보(데이터) 영구 삭제 메서드
+   */
   public void deleteMember() {
     String memberId = SecurityUtils.getAuthMemberId();
     jpaMemberRepository.deleteById(memberId);

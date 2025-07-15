@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/enum")
 @RequiredArgsConstructor
-@Tag(name = "Enum", description = "Enum 관련 API")
+@Tag(name = "Enum(선택형 필드)", description = "Enum 관련 API")
 public class EnumController {
   private final EnumService enumService;
 
