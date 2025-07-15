@@ -21,8 +21,8 @@ public class PaymentHistory extends BaseTimeEntity {
   @Column(name = "payment_history_id", nullable = false)
   private Long paymentHistoryId;
 
-  @Column(name = "expense", nullable = false)
-  private String expense;
+  @Column(name = "cost", nullable = false)
+  private String cost;
 
   @Column(name = "payment_date", nullable = false)
   private LocalDateTime paymentDate;

@@ -1,7 +1,7 @@
 package com.subnity.domain.member.controller;
 
 import com.subnity.common.api_response.ApiResponse;
-import com.subnity.domain.member.controller.response.DetailMemberResponse;
+import com.subnity.domain.member.controller.response.GetMemberResponse;
 import com.subnity.domain.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +19,7 @@ public class MemberController {
 
   @GetMapping(value = "")
   @Operation(summary = "회원 조회", description = "인증된 회원 조회 엔드포인트")
-  public ApiResponse<DetailMemberResponse> getMember() {
+  public ApiResponse<GetMemberResponse> getMember() {
     return ApiResponse.onSuccess(memberService.getMember());
   }
 }

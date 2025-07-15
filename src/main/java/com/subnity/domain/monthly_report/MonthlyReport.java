@@ -50,5 +50,5 @@ public class MonthlyReport {
   @Builder.Default
   @OneToMany(mappedBy = "monthlyReport", cascade = CascadeType.ALL, orphanRemoval = true)
   @Column(name = "category_expense")
-  private List<CategoryExpense> categoryExpenseList = new ArrayList<>();
+  private List<CategoryCost> categoryExpenseList = new ArrayList<>();
 }

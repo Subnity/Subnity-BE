@@ -1,7 +1,5 @@
 package com.subnity.domain.member.controller.response;
 
-import com.subnity.domain.monthly_report.controller.response.DetailMonthlyReportResponse;
-import com.subnity.domain.subscription.controller.response.DetailSubscrResponse;
 import com.subnity.domain.member.enums.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,15 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "회원 상세 정보 조회 응답 객체")
-public class DetailMemberResponse {
+@Schema(description = "회원 정보 조회 응답 객체")
+public class GetMemberResponse {
 
   @Schema(description = "회원 ID")
   private String memberId;
@@ -36,12 +31,4 @@ public class DetailMemberResponse {
 
   @Schema(description = "알림 여부")
   private Boolean isNotification;
-
-  @Builder.Default
-  @Schema(description = "구독 목록")
-  private List<DetailSubscrResponse> subscriptions = new ArrayList<>();
-
-  @Builder.Default
-  @Schema(description = "월별 리포트 목록")
-  private List<DetailMonthlyReportResponse> monthlyReports = new ArrayList<>();
 }

@@ -2,7 +2,7 @@ package com.subnity.domain.member.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.subnity.domain.member.controller.response.DetailMemberResponse;
+import com.subnity.domain.member.controller.response.GetMemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -10,13 +10,13 @@ import static com.subnity.domain.member.QMember.member;
 
 @Repository
 @RequiredArgsConstructor
-public class DetailMemberRepository {
+public class GetMemberRepository {
   private final JPAQueryFactory queryFactory;
 
-  public DetailMemberResponse findById(String memberId) {
+  public GetMemberResponse findById(String memberId) {
     return queryFactory.select(
       Projections.fields(
-        DetailMemberResponse.class,
+        GetMemberResponse.class,
         member.memberId,
         member.name,
         member.profileUrl,
@@ -29,4 +29,6 @@ public class DetailMemberRepository {
     .where(member.memberId.eq(memberId))
     .fetchOne();
   }
+
+
 }
