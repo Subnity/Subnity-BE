@@ -7,14 +7,19 @@ import com.subnity.domain.member.Member;
 import com.subnity.domain.member.utils.MemberUtils;
 import com.subnity.domain.subscription.Subscription;
 import com.subnity.domain.subscription.controller.request.CreateSubscrRequest;
-import com.subnity.domain.subscription.repository.JpaSubscriptionRepository;
+import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
+import com.subnity.domain.subscription.repository.JpaSubscrRepository;
+import com.subnity.domain.subscription.repository.SubscrRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class SubscrService {
-  private final JpaSubscriptionRepository jpaRepository;
+  private final JpaSubscrRepository jpaRepository;
+  private final SubscrRepository subscrRepository;
 
   public void createSubscription(CreateSubscrRequest request) {
     String memberId = SecurityUtils.getAuthMemberId();
@@ -30,14 +35,17 @@ public class SubscrService {
           .category(request.category())
           .isNotification(request.isNotification())
           .paymentCycle(request.paymentCycle())
-          .member(member)
-          .cancelledAt(request.cancelledAt())
           .lastPaymentDate(request.lastPaymentDate())
-          .nextPaymentDate(request.nextPaymentDate())
+          .member(member)
           .build()
       );
     } else {
       throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독을 생성할 수 없습니다.");
     }
+  }
+
+  public List<GetSubscrResponse> getSubscrList() {
+    String memberId = SecurityUtils.getAuthMemberId();
+    return subscrRepository.findByMemberId(memberId);
   }
 }

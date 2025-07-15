@@ -31,12 +31,6 @@ public record CreateSubscrRequest(
   @Schema(description = "알림 여부")
   Boolean isNotification,
 
-  @Schema(description = "해지일")
-  LocalDate cancelledAt,
-
   @Schema(description = "결제일")
-  LocalDate lastPaymentDate,
-
-  @Schema(description = "다음 결제일")
-  LocalDate nextPaymentDate
+  LocalDate lastPaymentDate
 ) { }

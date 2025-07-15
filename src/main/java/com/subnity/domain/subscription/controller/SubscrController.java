@@ -2,15 +2,15 @@ package com.subnity.domain.subscription.controller;
 
 import com.subnity.common.api_response.ApiResponse;
 import com.subnity.domain.subscription.controller.request.CreateSubscrRequest;
+import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
 import com.subnity.domain.subscription.service.SubscrService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/subscr")
@@ -24,5 +24,11 @@ public class SubscrController {
   public ApiResponse<Void> createSubscription(@RequestBody @Valid CreateSubscrRequest request) {
     subscrService.createSubscription(request);
     return ApiResponse.onSuccess();
+  }
+
+  @GetMapping(value = "/list")
+  @Operation(summary = "구독 목록 조회", description = "구독 목록 조회 엔드포인트")
+  public ApiResponse<List<GetSubscrResponse>> getSubscrList() {
+    return ApiResponse.onSuccess(subscrService.getSubscrList());
   }
 }
