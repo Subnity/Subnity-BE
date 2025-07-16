@@ -8,13 +8,19 @@ import com.subnity.domain.member.utils.MemberUtils;
 import com.subnity.domain.subscription.Subscription;
 import com.subnity.domain.subscription.controller.request.CreateSubscrRequest;
 import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
+import com.subnity.domain.subscription.enums.PaymentCycle;
 import com.subnity.domain.subscription.repository.JpaSubscrRepository;
 import com.subnity.domain.subscription.repository.SubscrRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * 코드 정리 및 리펙토링 필요성 있음
+ */
 @Service
 @RequiredArgsConstructor
 public class SubscrService {
@@ -26,7 +32,7 @@ public class SubscrService {
     Member member = MemberUtils.getMember(memberId);
 
     if (member != null) {
-      jpaRepository.save(
+      this.jpaRepository.save(
         Subscription.builder()
           .platformName(request.platformName())
           .description(request.description())
@@ -36,6 +42,7 @@ public class SubscrService {
           .isNotification(request.isNotification())
           .paymentCycle(request.paymentCycle())
           .lastPaymentDate(request.lastPaymentDate())
+          .nextPaymentDate(this.getNextPaymentDate(request.lastPaymentDate(), request.paymentCycle()))
           .member(member)
           .build()
       );
@@ -46,6 +53,30 @@ public class SubscrService {
 
   public List<GetSubscrResponse> getSubscrList() {
     String memberId = SecurityUtils.getAuthMemberId();
-    return subscrRepository.findByMemberId(memberId);
+    return this.subscrRepository.findByMemberId(memberId);
+  }
+
+  private LocalDate getNextPaymentDate(LocalDate date, PaymentCycle paymentCycle) {
+    LocalDate nextPaymentDate = null;
+    int[] months = { 1, 3, 5, 7, 8, 10, 12 }; // 31일이 있는 달
+    int month = 30;
+
+    switch (paymentCycle) {
+      case MONTH:
+        String lastMonth = date.format(DateTimeFormatter.ofPattern("MM"));
+        for (int m : months) {
+          if (lastMonth.contains(String.valueOf(m))) {
+            nextPaymentDate = date.plusDays(++month);
+          } else {
+            nextPaymentDate = date.plusYears(month);
+          }
+        }
+        break;
+      case YEAR:
+        nextPaymentDate = date.plusYears(1);
+        break;
+    }
+
+    return nextPaymentDate;
   }
 }
