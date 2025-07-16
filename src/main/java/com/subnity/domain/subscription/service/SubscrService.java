@@ -7,6 +7,7 @@ import com.subnity.domain.member.Member;
 import com.subnity.domain.member.utils.MemberUtils;
 import com.subnity.domain.subscription.Subscription;
 import com.subnity.domain.subscription.controller.request.CreateSubscrRequest;
+import com.subnity.domain.subscription.controller.request.UpdateSubscrRequest;
 import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
 import com.subnity.domain.subscription.enums.PaymentCycle;
 import com.subnity.domain.subscription.repository.JpaSubscrRepository;
@@ -56,6 +57,11 @@ public class SubscrService {
   public List<GetSubscrResponse> getSubscrList() {
     String memberId = SecurityUtils.getAuthMemberId();
     return this.subscrRepository.findByMemberId(memberId);
+  }
+
+  public void updateSubscription(UpdateSubscrRequest request) {
+    String memberId = SecurityUtils.getAuthMemberId();
+    this.subscrRepository.updateSubscription(request, memberId);
   }
 
   private LocalDate getNextPaymentDate(LocalDate date, PaymentCycle paymentCycle) {

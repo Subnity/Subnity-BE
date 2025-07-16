@@ -2,6 +2,7 @@ package com.subnity.domain.subscription.controller;
 
 import com.subnity.common.api_response.ApiResponse;
 import com.subnity.domain.subscription.controller.request.CreateSubscrRequest;
+import com.subnity.domain.subscription.controller.request.UpdateSubscrRequest;
 import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
 import com.subnity.domain.subscription.service.SubscrService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,5 +31,12 @@ public class SubscrController {
   @Operation(summary = "구독 목록 조회", description = "구독 목록 조회 엔드포인트")
   public ApiResponse<List<GetSubscrResponse>> getSubscrList() {
     return ApiResponse.onSuccess(subscrService.getSubscrList());
+  }
+
+  @PatchMapping(value = "/update")
+  @Operation(summary = "구독 정보 수정", description = "구독 정보 수정 엔드포인트")
+  public ApiResponse<Void> updateSubscription(@RequestBody @Valid UpdateSubscrRequest request) {
+    subscrService.updateSubscription(request);
+    return ApiResponse.onSuccess();
   }
 }
