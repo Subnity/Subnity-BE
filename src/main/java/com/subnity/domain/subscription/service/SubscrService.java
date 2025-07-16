@@ -68,7 +68,7 @@ public class SubscrService {
           if (lastMonth.contains(String.valueOf(m))) {
             nextPaymentDate = date.plusDays(31);
           } else {
-            nextPaymentDate = date.plusYears(30);
+            nextPaymentDate = date.plusDays(30);
           }
         }
         break;
