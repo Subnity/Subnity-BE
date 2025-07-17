@@ -4,10 +4,7 @@ import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.common.utils.enums.SubscrStatus;
 import com.subnity.domain.subscription.enums.PaymentCycle;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -15,7 +12,8 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "구독 정보 상세 조회 응답 객체")
+@ToString
+@Schema(description = "구독 정보 조회 응답 객체")
 public class GetSubscrResponse {
 
   @Schema(description = "구독 ID")

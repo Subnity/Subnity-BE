@@ -27,6 +27,12 @@ public class SubscrController {
     return ApiResponse.onSuccess();
   }
 
+  @GetMapping(value = "/{id}")
+  @Operation(summary = "구독 정보 조회", description = "구독 ID를 통해서 하나의 구독 정보를 가져오는 엔드포인트")
+  public ApiResponse<GetSubscrResponse> getSubscr(@PathVariable("id") String subscriptionId) {
+    return ApiResponse.onSuccess(subscrService.getSubscr(subscriptionId));
+  }
+
   @GetMapping(value = "/list")
   @Operation(summary = "구독 목록 조회", description = "구독 목록 조회 엔드포인트")
   public ApiResponse<List<GetSubscrResponse>> getSubscrList() {
@@ -40,9 +46,9 @@ public class SubscrController {
     return ApiResponse.onSuccess();
   }
 
-  @DeleteMapping(value = "/delete")
+  @DeleteMapping(value = "/delete/{id}")
   @Operation(summary = "구독 제거", description = "구독 정보를 제거하는 엔드포인트")
-  public ApiResponse<Void> deleteSubscription(@RequestParam String subscriptionId) {
+  public ApiResponse<Void> deleteSubscription(@PathVariable("id") String subscriptionId) {
     subscrService.deleteSubscription(subscriptionId);
     return ApiResponse.onSuccess();
   }

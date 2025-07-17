@@ -54,8 +54,23 @@ public class SubscrService {
     }
   }
 
+  public GetSubscrResponse getSubscr(String subscrId) {
+    String memberId = SecurityUtils.getAuthMemberId();
+    GetSubscrResponse response = this.subscrRepository.findBySubscrId(Long.parseLong(subscrId), memberId);
+    if (response == null) {
+      throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독을 찾을 수 없습니다.");
+    }
+
+    return response;
+  }
+
   public List<GetSubscrResponse> getSubscrList() {
     String memberId = SecurityUtils.getAuthMemberId();
+    List<GetSubscrResponse> response = this.subscrRepository.findByMemberId(memberId);
+    if (response.isEmpty()) {
+      throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독 목록을 찾을 수 없습니다.");
+    }
+
     return this.subscrRepository.findByMemberId(memberId);
   }
 

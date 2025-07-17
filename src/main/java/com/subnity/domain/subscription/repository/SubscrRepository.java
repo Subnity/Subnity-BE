@@ -17,6 +17,31 @@ import static com.subnity.domain.subscription.QSubscription.subscription;
 public class SubscrRepository {
   private final JPAQueryFactory queryFactory;
 
+  public GetSubscrResponse findBySubscrId(Long subscrId, String memberId) {
+    return queryFactory.select(
+        Projections.fields(
+          GetSubscrResponse.class,
+          subscription.subscriptionId,
+          subscription.platformName,
+          subscription.description,
+          subscription.cost,
+          subscription.paymentCycle,
+          subscription.status,
+          subscription.category,
+          subscription.isNotification,
+          subscription.lastPaymentDate,
+          subscription.nextPaymentDate,
+          subscription.member.memberId
+        )
+      )
+      .from(subscription)
+      .where(
+        subscription.member.memberId.eq(memberId),
+        subscription.subscriptionId.eq(subscrId)
+      )
+      .fetchOne();
+  }
+
   public List<GetSubscrResponse> findByMemberId(String memberId) {
     return queryFactory.select(
       Projections.fields(
@@ -47,7 +72,10 @@ public class SubscrRepository {
       .set(subscription.cost, request.cost())
       .set(subscription.category, request.category())
       .set(subscription.isNotification, request.isNotification())
-      .where(subscription.member.memberId.eq(memberId))
+      .where(
+        subscription.member.memberId.eq(memberId),
+        subscription.subscriptionId.eq(Long.parseLong(request.subscrId()))
+      )
       .execute();
   }
 

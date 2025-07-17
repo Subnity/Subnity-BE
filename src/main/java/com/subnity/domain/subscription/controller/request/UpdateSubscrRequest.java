@@ -6,6 +6,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "구독 정보 수정 요청 객체")
 public record UpdateSubscrRequest(
 
+  @Schema(description = "구독 ID")
+  String subscrId,
+
   @Schema(description = "플랫폼 이름")
   String platformName,
 
