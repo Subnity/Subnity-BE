@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class GetSubscrResponse {
 
   @Schema(description = "구독 ID")
-  private Long subscriptionId;
+  private Long subscrId;
 
   @Schema(description = "플랫폼 이름")
   private String platformName;

@@ -12,16 +12,25 @@ import java.util.List;
 
 import static com.subnity.domain.subscription.QSubscription.subscription;
 
+/**
+ * SubscrRepository : 구독 관련 Repository
+ */
 @Repository
 @RequiredArgsConstructor
 public class SubscrRepository {
   private final JPAQueryFactory queryFactory;
 
+  /**
+   * 구독 ID로 특정 구독 조회
+   * @param subscrId : 구독 ID
+   * @param memberId : 회원 ID
+   * @return : 특정 구독 반환
+   */
   public GetSubscrResponse findBySubscrId(Long subscrId, String memberId) {
     return queryFactory.select(
         Projections.fields(
           GetSubscrResponse.class,
-          subscription.subscriptionId,
+          subscription.subscriptionId.as("subscrId"),
           subscription.platformName,
           subscription.description,
           subscription.cost,
@@ -42,11 +51,16 @@ public class SubscrRepository {
       .fetchOne();
   }
 
-  public List<GetSubscrResponse> findByMemberId(String memberId) {
+  /**
+   * 구독 목록 조회
+   * @param memberId : 회원 ID
+   * @return : 구독 목록 반환
+   */
+  public List<GetSubscrResponse> subscrListByMemberId(String memberId) {
     return queryFactory.select(
       Projections.fields(
         GetSubscrResponse.class,
-        subscription.subscriptionId,
+        subscription.subscriptionId.as("subscrId"),
         subscription.platformName,
         subscription.description,
         subscription.cost,
@@ -64,8 +78,13 @@ public class SubscrRepository {
     .fetch();
   }
 
+  /**
+   * 구독 정보 수정
+   * @param request : 구독 수정 요청 객체
+   * @param memberId : 회원 ID
+   */
   @Transactional
-  public void updateSubscription(UpdateSubscrRequest request, String memberId) {
+  public void updateSubscr(UpdateSubscrRequest request, String memberId) {
     queryFactory.update(subscription)
       .set(subscription.platformName, request.platformName())
       .set(subscription.description, request.description())
@@ -79,8 +98,13 @@ public class SubscrRepository {
       .execute();
   }
 
+  /**
+   * 특정 구독 제거
+   * @param subscrId : 구독 ID
+   * @param memberId : 회원 ID
+   */
   @Transactional
-  public void deleteSubscription(Long subscrId, String memberId) {
+  public void deleteSubscr(Long subscrId, String memberId) {
     queryFactory.delete(subscription)
       .where(
         subscription.member.memberId.eq(memberId),

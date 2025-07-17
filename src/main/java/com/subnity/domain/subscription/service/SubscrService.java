@@ -20,17 +20,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * 코드 정리 및 리펙토링 필요성 있음
+ * SubscrService : 구독 관련 Service
  */
 @Service
 @RequiredArgsConstructor
 public class SubscrService {
-  private final int[] MONTHS = { 1, 3, 5, 7, 8, 10, 12 }; // 31일이 있는 달
+  /* 31일이 있는 달 */
+  private final int[] MONTHS = { 1, 3, 5, 7, 8, 10, 12 };
 
   private final JpaSubscrRepository jpaRepository;
   private final SubscrRepository subscrRepository;
 
-  public void createSubscription(CreateSubscrRequest request) {
+  /**
+   * 구독 생성 메서드
+   * @param request : 구독 생성 요청 객체
+   */
+  public void createSubscr(CreateSubscrRequest request) {
     String memberId = SecurityUtils.getAuthMemberId();
     Member member = MemberUtils.getMember(memberId);
 
@@ -45,7 +50,9 @@ public class SubscrService {
           .isNotification(request.isNotification())
           .paymentCycle(request.paymentCycle())
           .lastPaymentDate(request.lastPaymentDate())
-          .nextPaymentDate(this.getNextPaymentDate(request.lastPaymentDate(), request.paymentCycle()))
+          .nextPaymentDate(
+            this.getNextPaymentDate(request.lastPaymentDate(), request.paymentCycle())
+          )
           .member(member)
           .build()
       );
@@ -54,6 +61,11 @@ public class SubscrService {
     }
   }
 
+  /**
+   * 특정 구독 조회 메서드
+   * @param subscrId : 구독 ID
+   * @return : 구구독 정보 반환
+   */
   public GetSubscrResponse getSubscr(String subscrId) {
     String memberId = SecurityUtils.getAuthMemberId();
     GetSubscrResponse response = this.subscrRepository.findBySubscrId(Long.parseLong(subscrId), memberId);
@@ -64,26 +76,44 @@ public class SubscrService {
     return response;
   }
 
+  /**
+   * 구독 목록 조회 메서드
+   * @return : 구독 목록 반환
+   */
   public List<GetSubscrResponse> getSubscrList() {
     String memberId = SecurityUtils.getAuthMemberId();
-    List<GetSubscrResponse> response = this.subscrRepository.findByMemberId(memberId);
+    List<GetSubscrResponse> response = this.subscrRepository.subscrListByMemberId(memberId);
     if (response.isEmpty()) {
       throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독 목록을 찾을 수 없습니다.");
     }
 
-    return this.subscrRepository.findByMemberId(memberId);
+    return response;
   }
 
-  public void updateSubscription(UpdateSubscrRequest request) {
+  /**
+   * 구독 수정 메서드
+   * @param request : 구독 수정 요청 객체
+   */
+  public void updateSubscr(UpdateSubscrRequest request) {
     String memberId = SecurityUtils.getAuthMemberId();
-    this.subscrRepository.updateSubscription(request, memberId);
+    this.subscrRepository.updateSubscr(request, memberId);
   }
 
-  public void deleteSubscription(String subscrId) {
+  /**
+   * 구독 제거 메서드
+   * @param subscrId : 구독 ID
+   */
+  public void deleteSubscr(String subscrId) {
     String memberId = SecurityUtils.getAuthMemberId();
-    this.subscrRepository.deleteSubscription(Long.parseLong(subscrId), memberId);
+    this.subscrRepository.deleteSubscr(Long.parseLong(subscrId), memberId);
   }
 
+  /**
+   * 다음 구독 결제일 추측 메서드
+   * @param date : 구독일
+   * @param paymentCycle : 결제 주기
+   * @return : 다음 결제일 반환
+   */
   private LocalDate getNextPaymentDate(LocalDate date, PaymentCycle paymentCycle) {
     LocalDate nextPaymentDate = null;
 
