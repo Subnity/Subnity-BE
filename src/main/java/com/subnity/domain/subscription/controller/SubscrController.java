@@ -39,4 +39,11 @@ public class SubscrController {
     subscrService.updateSubscription(request);
     return ApiResponse.onSuccess();
   }
+
+  @DeleteMapping(value = "/delete")
+  @Operation(summary = "구독 제거", description = "구독 정보를 제거하는 엔드포인트")
+  public ApiResponse<Void> deleteSubscription(@RequestParam String subscriptionId) {
+    subscrService.deleteSubscription(subscriptionId);
+    return ApiResponse.onSuccess();
+  }
 }

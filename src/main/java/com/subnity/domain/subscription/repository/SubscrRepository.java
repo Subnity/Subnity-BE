@@ -2,10 +2,8 @@ package com.subnity.domain.subscription.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.domain.subscription.controller.request.UpdateSubscrRequest;
 import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -50,6 +48,16 @@ public class SubscrRepository {
       .set(subscription.category, request.category())
       .set(subscription.isNotification, request.isNotification())
       .where(subscription.member.memberId.eq(memberId))
+      .execute();
+  }
+
+  @Transactional
+  public void deleteSubscription(Long subscrId, String memberId) {
+    queryFactory.delete(subscription)
+      .where(
+        subscription.member.memberId.eq(memberId),
+        subscription.subscriptionId.eq(subscrId)
+      )
       .execute();
   }
 }

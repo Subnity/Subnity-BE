@@ -64,6 +64,11 @@ public class SubscrService {
     this.subscrRepository.updateSubscription(request, memberId);
   }
 
+  public void deleteSubscription(String subscrId) {
+    String memberId = SecurityUtils.getAuthMemberId();
+    this.subscrRepository.deleteSubscription(Long.parseLong(subscrId), memberId);
+  }
+
   private LocalDate getNextPaymentDate(LocalDate date, PaymentCycle paymentCycle) {
     LocalDate nextPaymentDate = null;
 
