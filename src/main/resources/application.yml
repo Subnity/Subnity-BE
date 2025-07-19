@@ -22,24 +22,27 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: smtp.gmail.com
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+mail:
+  from: ${MAIL_FROM}
+
 jwt:
   secret: ${JWT}
 
 crypto:
   private-key: ${CRYPTO_PRIVATE_KEY}
   transformation: ${CRYPTO_TRANSFORMATION}
-
-#  mail:
-#    host: smtp.gmail.com
-#    port: ${MAIL_PORT}
-#    username: ${MAIL_USERNAME}
-#    password: ${MAIL_PW}
-#    properties:
-#      mail:
-#        smtp:
-#          starttls:
-#            enable: true
-#          auth: true
 
 #cloud:
 #  aws:
