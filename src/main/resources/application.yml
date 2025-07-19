@@ -34,6 +34,9 @@ spring:
           starttls:
             enable: true
 
+mail:
+  from: ${MAIL_FROM}
+
 jwt:
   secret: ${JWT}
 
