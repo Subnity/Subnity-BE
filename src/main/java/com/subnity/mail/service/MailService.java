@@ -36,11 +36,11 @@ public class MailService {
     Member member = MemberUtils.getMember(memberId);
 
     String gmailToken = "Bearer " + member.getMailToken();
-    String query = "subject:" + keyword + "결제내역 OR subject:" + keyword;
+    String query = "subject:" + keyword + " 결제내역";
 
-    List<Map<String, String>> mailList = gmailClient.getGmailList(gmailToken, query, 100).getMessages();
+    List<Map<String, String>> mailList = gmailClient.getGmailList(gmailToken, query, 20).getMessages();
 
-    if (!mailList.isEmpty()) { // 메일 목록이 비어있지 않으면 아래 로직 실행
+    if (mailList != null && !mailList.isEmpty()) { // 메일 목록이 비어있지 않으면 아래 로직 실행
       for (Map<String, String> mail : mailList) {
         GetGmailResponse data = gmailClient.getGmailById(gmailToken, mail.get("id"));
 
@@ -50,6 +50,11 @@ public class MailService {
         // bodySize가 0이면 데이터가 들어있지 않은걸로 간주
         if (bodySize != 0) {
           String amount = paymentAmount(body);
+          LocalDate date = paymentDate(body);
+
+          if (amount != null && date != null) {
+            System.out.println("금액: " + amount + "원, 날짜: " + date);
+          }
         } else {
           log.error("데이터가 없습니다.");
         }
@@ -78,10 +83,37 @@ public class MailService {
 
       if (matcher.find()) {
         responseAmount = matcher.group();
-        log.info("결제 금액: {}원", matcher.group());
       }
     }
 
     return responseAmount;
+  }
+
+  private LocalDate paymentDate(Map<String, Object> body) {
+    LocalDate responseDate = null;
+
+    // 결제 금액 찾기
+    for (Element element : htmlElements(body)) {
+      Pattern pattern = Pattern.compile("\\d{4}년\\s\\d{2}월\\s\\d{2}일");
+      Matcher matcher = pattern.matcher(element.text());
+
+      if (matcher.find()) {
+        String matchDate = matcher.group();
+
+        int year = Integer.parseInt(
+          matchDate.substring(0, matchDate.indexOf("년"))
+        );
+        int month = Integer.parseInt(
+          matchDate.substring(matchDate.indexOf("년") + 2, matchDate.indexOf("월"))
+        );
+        int day = Integer.parseInt(
+          matchDate.substring(matchDate.indexOf("월") + 2, matchDate.indexOf("일"))
+        );
+
+        responseDate = LocalDate.of(year, month, day);
+      }
+    }
+
+    return responseDate;
   }
 }
