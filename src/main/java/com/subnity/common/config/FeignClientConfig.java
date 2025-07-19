@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.logging.Level;
 
 @Configuration
-public class FeignConfig {
+public class FeignClientConfig {
 
   @Bean
   public Level getLogLevel() {
