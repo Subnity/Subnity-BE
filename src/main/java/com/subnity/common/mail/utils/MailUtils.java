@@ -124,7 +124,7 @@ public class MailUtils {
         }
       }
     } else {
-      throw new GeneralException(ErrorStatus.NOT_FOUND, "메일을 찾을 수 없습니다.");
+      return searchMailList;
     }
 
     return searchMailList;
