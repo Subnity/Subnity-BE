@@ -74,10 +74,9 @@ public class MailUtils {
    * @param dto : 메일 정보 Dto 객체
    * @return : 검색한 메일 목록을 반환
    */
-  public static List<SearchMail> mailSearchByKeyword(SearchMailDto dto) {
+  public static List<SearchMail> mailSearchByKeyword(SearchMailDto dto, Member member) {
     List<SearchMail> searchMailList = new ArrayList<>();
 
-    Member member = getAuthMember();
     String mailToken = "Bearer " + member.getMailToken();
     LocalDate now = LocalDate.now();
 
@@ -125,7 +124,7 @@ public class MailUtils {
         }
       }
     } else {
-      throw new GeneralException(ErrorStatus.NOT_FOUND, "메일을 찾을 수 없습니다.");
+      return searchMailList;
     }
 
     return searchMailList;

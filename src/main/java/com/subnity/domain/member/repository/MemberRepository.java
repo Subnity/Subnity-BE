@@ -53,4 +53,17 @@ public class MemberRepository {
       .where(member.memberId.eq(memberId))
       .execute();
   }
+
+  /**
+   * 스케줄러 ID 수정
+   * @param schedulerId : 스케줄러 ID
+   * @param memberId : 회원 ID
+   */
+  @Transactional
+  public void updateSchedulerId(String schedulerId, String memberId) {
+    queryFactory.update(member)
+      .set(member.schedulerId, schedulerId)
+      .where(member.memberId.eq(memberId))
+      .execute();
+  }
 }
