@@ -1,9 +1,16 @@
 package com.subnity.domain.member.controller;
 
+import com.subnity.auth.utils.SecurityUtils;
 import com.subnity.common.api_response.ApiResponse;
+import com.subnity.common.mail.dto.SearchMailDto;
+import com.subnity.common.mail.utils.MailUtils;
+import com.subnity.domain.member.Member;
 import com.subnity.domain.member.controller.request.UpdateMemberRequest;
 import com.subnity.domain.member.controller.response.GetMemberResponse;
 import com.subnity.domain.member.service.MemberService;
+import com.subnity.domain.member.utils.MemberUtils;
+import com.subnity.domain.subscription.enums.PaymentCycle;
+import com.subnity.scheduler.Scheduler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member", description = "회원 관련 API")
 public class MemberController {
   private final MemberService memberService;
+  private final Scheduler scheduler;
 
   /**
    * 회원 정보 조회 엔드포인트
@@ -27,6 +35,13 @@ public class MemberController {
   @GetMapping(value = "")
   @Operation(summary = "회원 정보 조회", description = "회원 조회 엔드포인트")
   public ApiResponse<GetMemberResponse> getMember() {
+    Member member = MemberUtils.getMember(SecurityUtils.getAuthMemberId());
+    scheduler.mailSearchTaskRegister("1", "0 16 19 20 7 *", member,
+      SearchMailDto.builder()
+        .keyword("스포티파이")
+        .cycle(PaymentCycle.MONTH)
+        .build()
+    );
     return ApiResponse.onSuccess(memberService.getMember());
   }
 
