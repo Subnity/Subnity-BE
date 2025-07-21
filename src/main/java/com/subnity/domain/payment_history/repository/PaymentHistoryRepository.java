@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.subnity.domain.payment_history.QPaymentHistory.paymentHistory;
 
@@ -39,5 +40,21 @@ public class PaymentHistoryRepository {
     .from(paymentHistory)
     .where(paymentHistory.paymentHistoryId.eq(paymentHistoryId))
     .fetchOne();
+  }
+
+  public List<DetailPaymentHistoryResponse> paymentHistoryList(String memberId) {
+    return queryFactory.select(
+      Projections.fields(
+        DetailPaymentHistoryResponse.class,
+        paymentHistory.paymentHistoryId,
+        paymentHistory.subscription.subscriptionId.as("subscrId"),
+        paymentHistory.cost,
+        paymentHistory.paymentDate,
+        paymentHistory.paymentStatus
+      )
+    )
+    .from(paymentHistory)
+    .where(paymentHistory.subscription.member.memberId.eq(memberId))
+    .fetch();
   }
 }

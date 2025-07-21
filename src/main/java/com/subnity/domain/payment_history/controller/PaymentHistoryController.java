@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/payment")
 @RequiredArgsConstructor
@@ -28,5 +30,11 @@ public class PaymentHistoryController {
   @Operation(summary = "특정 결제 히스토리 조회", description = "특정 결제 히스토리 조회 엔드포인트")
   public ApiResponse<DetailPaymentHistoryResponse> getPaymentHistory(@PathVariable("id") String paymentHistoryId) {
     return ApiResponse.onSuccess(paymentHistoryService.getPaymentHistory(paymentHistoryId));
+  }
+
+  @GetMapping(value = "/list")
+  @Operation(summary = "결제 히스토리 목록 조회", description = "결제 히스토리 목록 조회 엔드포인트")
+  public ApiResponse<List<DetailPaymentHistoryResponse>> getPaymentHistoryList() {
+    return ApiResponse.onSuccess(paymentHistoryService.getPaymentHistoryList());
   }
 }
