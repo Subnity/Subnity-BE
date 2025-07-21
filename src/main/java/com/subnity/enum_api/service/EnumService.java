@@ -2,6 +2,7 @@ package com.subnity.enum_api.service;
 
 import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.common.utils.enums.SubscrStatus;
+import com.subnity.domain.payment_history.enums.PaymentStatus;
 import com.subnity.domain.subscription.enums.PaymentCycle;
 import com.subnity.enum_api.controller.response.ListEnumDto;
 import com.subnity.enum_api.controller.response.ListEnumResponse;
@@ -55,6 +56,24 @@ public class EnumService {
    */
   public ListEnumResponse getSubscrStatusEnumList() {
     List<ListEnumDto> enumList = Stream.of(SubscrStatus.values())
+      .map(e ->
+        ListEnumDto.builder()
+          .code(e.name())
+          .value(e.getValue())
+          .build()
+      ).toList();
+
+    return ListEnumResponse.builder()
+      .enumList(enumList)
+      .build();
+  }
+
+  /**
+   * PaymentStatus Enum 목록 조회
+   * @return : PaymentStatus Enum 응답 객체 반환
+   */
+  public ListEnumResponse getPaymentStatusEnumList() {
+    List<ListEnumDto> enumList = Stream.of(PaymentStatus.values())
       .map(e ->
         ListEnumDto.builder()
           .code(e.name())

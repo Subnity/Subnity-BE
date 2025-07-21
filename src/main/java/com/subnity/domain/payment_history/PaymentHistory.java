@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class PaymentHistory extends BaseTimeEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "payment_history_id", nullable = false)
   private Long paymentHistoryId;
 
