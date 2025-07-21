@@ -97,19 +97,4 @@ public class SubscrRepository {
       )
       .execute();
   }
-
-  /**
-   * 특정 구독 제거
-   * @param subscrId : 구독 ID
-   * @param memberId : 회원 ID
-   */
-  @Transactional
-  public void deleteSubscr(Long subscrId, String memberId) {
-    queryFactory.delete(subscription)
-      .where(
-        subscription.member.memberId.eq(memberId),
-        subscription.subscriptionId.eq(subscrId)
-      )
-      .execute();
-  }
 }

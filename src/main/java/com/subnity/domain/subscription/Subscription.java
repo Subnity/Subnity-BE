@@ -67,12 +67,10 @@ public class Subscription extends BaseTimeEntity {
   private Member member;
 
   @Builder.Default
-  @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @Column(name = "subscription_history")
+  @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
   private List<SubscriptionHistory> historyList = new ArrayList<>();
 
   @Builder.Default
-  @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @Column(name = "payment_history")
+  @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
   private List<PaymentHistory> paymentHistoryList = new ArrayList<>();
 }

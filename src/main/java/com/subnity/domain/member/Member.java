@@ -50,12 +50,10 @@ public class Member extends BaseTimeEntity {
   private String schedulerId;
 
   @Builder.Default
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-  @Column(name = "subscription_id")
+  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
   private List<Subscription> subscriptionList = new ArrayList<>();
 
   @Builder.Default
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-  @Column(name = "monthly_report_id")
+  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
   private List<MonthlyReport> monthlyReportList = new ArrayList<>();
 }
