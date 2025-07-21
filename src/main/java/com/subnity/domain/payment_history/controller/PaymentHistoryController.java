@@ -43,4 +43,11 @@ public class PaymentHistoryController {
   public ApiResponse<List<DetailPaymentHistoryResponse>> getPaymentHistoryListBySubscrId(@PathVariable("subscrId") String subscrId) {
     return ApiResponse.onSuccess(paymentHistoryService.getPaymentHistoryListBySubscrId(subscrId));
   }
+
+  @DeleteMapping(value = "/delete/{id}")
+  @Operation(summary = "특정 결제 히스토리 삭제", description = "특정 결제 히스토리 삭제 엔드포인트")
+  public ApiResponse<Void> deletePaymentHistory(@PathVariable("id") String paymentHistoryId) {
+    paymentHistoryService.deletePaymentHistory(paymentHistoryId);
+    return ApiResponse.onSuccess();
+  }
 }

@@ -3,6 +3,7 @@ package com.subnity.domain.payment_history.service;
 import com.subnity.auth.utils.SecurityUtils;
 import com.subnity.domain.payment_history.controller.request.CreatePaymentHistoryRequest;
 import com.subnity.domain.payment_history.controller.response.DetailPaymentHistoryResponse;
+import com.subnity.domain.payment_history.repository.JpaPaymentHistoryRepository;
 import com.subnity.domain.payment_history.repository.PaymentHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PaymentHistoryService {
   private final PaymentHistoryRepository paymentHistoryRepository;
+  private final JpaPaymentHistoryRepository jpaPaymentHistoryRepository;
 
   public void createPaymentHistory(CreatePaymentHistoryRequest request) {
     paymentHistoryRepository.save(request, LocalDateTime.now());
@@ -31,5 +33,9 @@ public class PaymentHistoryService {
   public List<DetailPaymentHistoryResponse> getPaymentHistoryListBySubscrId(String subscrId) {
     String memberId = SecurityUtils.getAuthMemberId();
     return paymentHistoryRepository.paymentHistoryListBySubscrId(Long.parseLong(subscrId), memberId);
+  }
+
+  public void deletePaymentHistory(String paymentHistoryId) {
+    jpaPaymentHistoryRepository.deleteById(Long.parseLong(paymentHistoryId));
   }
 }
