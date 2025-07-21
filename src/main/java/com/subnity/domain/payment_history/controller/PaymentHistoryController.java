@@ -37,4 +37,10 @@ public class PaymentHistoryController {
   public ApiResponse<List<DetailPaymentHistoryResponse>> getPaymentHistoryList() {
     return ApiResponse.onSuccess(paymentHistoryService.getPaymentHistoryList());
   }
+
+  @GetMapping(value = "/list/{subscrId}")
+  @Operation(summary = "특정 구독 결제 히스토리 목록 조회", description = "특정 구독 결제 히스토리 목록 조회 엔드포인트")
+  public ApiResponse<List<DetailPaymentHistoryResponse>> getPaymentHistoryListBySubscrId(@PathVariable("subscrId") String subscrId) {
+    return ApiResponse.onSuccess(paymentHistoryService.getPaymentHistoryListBySubscrId(subscrId));
+  }
 }

@@ -27,4 +27,9 @@ public class PaymentHistoryService {
     String memberId = SecurityUtils.getAuthMemberId();
     return paymentHistoryRepository.paymentHistoryList(memberId);
   }
+
+  public List<DetailPaymentHistoryResponse> getPaymentHistoryListBySubscrId(String subscrId) {
+    String memberId = SecurityUtils.getAuthMemberId();
+    return paymentHistoryRepository.paymentHistoryListBySubscrId(Long.parseLong(subscrId), memberId);
+  }
 }

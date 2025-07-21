@@ -57,4 +57,23 @@ public class PaymentHistoryRepository {
     .where(paymentHistory.subscription.member.memberId.eq(memberId))
     .fetch();
   }
+
+  public List<DetailPaymentHistoryResponse> paymentHistoryListBySubscrId(long subscrId, String memberId) {
+    return queryFactory.select(
+        Projections.fields(
+          DetailPaymentHistoryResponse.class,
+          paymentHistory.paymentHistoryId,
+          paymentHistory.subscription.subscriptionId.as("subscrId"),
+          paymentHistory.cost,
+          paymentHistory.paymentDate,
+          paymentHistory.paymentStatus
+        )
+      )
+      .from(paymentHistory)
+      .where(
+        paymentHistory.subscription.subscriptionId.eq(subscrId),
+        paymentHistory.subscription.member.memberId.eq(memberId)
+      )
+      .fetch();
+  }
 }
