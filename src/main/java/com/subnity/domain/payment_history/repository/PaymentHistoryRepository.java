@@ -1,9 +1,25 @@
 package com.subnity.domain.payment_history.repository;
 
-import com.subnity.domain.payment_history.PaymentHistory;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.subnity.domain.payment_history.controller.request.CreatePaymentHistoryRequest;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
+import static com.subnity.domain.payment_history.QPaymentHistory.paymentHistory;
+
 @Repository
-public interface PaymentHistoryRepository extends JpaRepository<PaymentHistory, Long> {
+@RequiredArgsConstructor
+public class PaymentHistoryRepository {
+  private final JPAQueryFactory queryFactory;
+
+  @Transactional
+  public void save(CreatePaymentHistoryRequest request, LocalDateTime now) {
+    queryFactory.insert(paymentHistory)
+      .columns(paymentHistory.cost, paymentHistory.paymentDate, paymentHistory.paymentStatus, paymentHistory.subscription.subscriptionId, paymentHistory._super.createdAt, paymentHistory._super.updatedAt)
+      .values(request.getCost(), request.getPaymentDate(), request.getStatus(), request.getSubscrId(), now, now)
+      .execute();
+  }
 }
