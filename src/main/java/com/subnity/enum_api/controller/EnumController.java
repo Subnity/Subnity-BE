@@ -34,4 +34,10 @@ public class EnumController {
   public ApiResponse<ListEnumResponse> getPaymentCycleEnumList() {
     return ApiResponse.onSuccess(enumService.getPaymentCycleEnumList());
   }
+
+  @GetMapping(value = "/payment-status")
+  @Operation(summary = "결제 상태", description = "결제 상태 Enum 목록 조회")
+  public ApiResponse<ListEnumResponse> getPaymentStatusEnumList() {
+    return ApiResponse.onSuccess(enumService.getPaymentStatusEnumList());
+  }
 }

@@ -7,15 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "결제 히스토리 정보 상세 조회 응답 객체")
-public class DetailPaymentHistoryResponse {
+@Schema(description = "결제 히스토리 정보 조회 응답 객체")
+public class GetPaymentHistoryResponse {
 
   @Schema(description = "결제 히스토리 ID")
   private long paymentHistoryId;
@@ -23,7 +22,7 @@ public class DetailPaymentHistoryResponse {
   @Schema(description = "구독 ID")
   private long subscrId;
 
-  @Schema(description = "요금")
+  @Schema(description = "결제 금액")
   private String cost;
 
   @Schema(description = "결제일")
