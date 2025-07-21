@@ -32,6 +32,6 @@ public class PaymentHistory extends BaseTimeEntity {
   private PaymentStatus paymentStatus;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "subscription_id")
+  @JoinColumn(name = "subscription_id", nullable = false)
   private Subscription subscription;
 }

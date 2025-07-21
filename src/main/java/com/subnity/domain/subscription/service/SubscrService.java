@@ -104,8 +104,7 @@ public class SubscrService {
    * @param subscrId : 구독 ID
    */
   public void deleteSubscr(String subscrId) {
-    String memberId = SecurityUtils.getAuthMemberId();
-    this.subscrRepository.deleteSubscr(Long.parseLong(subscrId), memberId);
+    this.jpaRepository.deleteById(Long.parseLong(subscrId));
   }
 
   /**
