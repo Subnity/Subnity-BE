@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -17,13 +18,16 @@ import java.time.LocalDate;
 public class DetailPaymentHistoryResponse {
 
   @Schema(description = "결제 히스토리 ID")
-  private Long paymentHistoryId;
+  private long paymentHistoryId;
+
+  @Schema(description = "구독 ID")
+  private long subscrId;
 
   @Schema(description = "요금")
   private String cost;
 
   @Schema(description = "결제일")
-  private LocalDate paymentDate;
+  private LocalDateTime paymentDate;
 
   @Schema(description = "결제 상태")
   private PaymentStatus paymentStatus;

@@ -1,6 +1,7 @@
 package com.subnity.domain.payment_history.service;
 
 import com.subnity.domain.payment_history.controller.request.CreatePaymentHistoryRequest;
+import com.subnity.domain.payment_history.controller.response.DetailPaymentHistoryResponse;
 import com.subnity.domain.payment_history.repository.PaymentHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,5 +15,9 @@ public class PaymentHistoryService {
 
   public void createPaymentHistory(CreatePaymentHistoryRequest request) {
     paymentHistoryRepository.save(request, LocalDateTime.now());
+  }
+
+  public DetailPaymentHistoryResponse getPaymentHistory(String paymentHistoryId) {
+    return paymentHistoryRepository.paymentHistoryById(Long.parseLong(paymentHistoryId));
   }
 }
