@@ -7,7 +7,6 @@ import com.subnity.common.utils.enums.SubscrStatus;
 import com.subnity.domain.member.Member;
 import com.subnity.domain.payment_history.PaymentHistory;
 import com.subnity.domain.subscription.enums.PaymentCycle;
-import com.subnity.domain.subscription_history.SubscriptionHistory;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -65,10 +64,6 @@ public class Subscription extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private Member member;
-
-  @Builder.Default
-  @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
-  private List<SubscriptionHistory> historyList = new ArrayList<>();
 
   @Builder.Default
   @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
