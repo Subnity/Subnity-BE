@@ -2,6 +2,8 @@ package com.subnity.domain.subscription.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.subnity.common.utils.enums.SubscrStatus;
+import com.subnity.domain.subscription.controller.response.GetActiveSubscrDto;
 import com.subnity.domain.subscription.controller.request.UpdateSubscrRequest;
 import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
 import jakarta.transaction.Transactional;
@@ -96,5 +98,25 @@ public class SubscrRepository {
         subscription.subscriptionId.eq(Long.parseLong(request.subscrId()))
       )
       .execute();
+  }
+
+  /**
+   * 구독중인 구독 목록 조회
+   * @return : 활성화된 구독 조회 Dto
+   */
+  public List<GetActiveSubscrDto> activeTotalSubscrCount() {
+    return queryFactory.select(
+        Projections.fields(
+          GetActiveSubscrDto.class,
+          subscription.subscriptionId.as("subscrId"),
+          subscription.platformName,
+          subscription.cost,
+          subscription.status,
+          subscription.category
+        )
+      )
+      .from(subscription)
+      .where(subscription.status.eq(SubscrStatus.ACTIVITY))
+      .fetch();
   }
 }

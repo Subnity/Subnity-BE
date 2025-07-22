@@ -28,15 +28,15 @@ public class MonthlyReport {
   private Integer year;
 
   @Column(name = "month", nullable = false)
-  private String month;
+  private Integer month;
 
-  @Column(name = "total_payment", nullable = false)
+  @Column(name = "total_payment")
   private String totalPayment;
 
-  @Column(name = "active_subscription_count", nullable = false)
+  @Column(name = "active_subscription_count")
   private int activeSubscrCount;
 
-  @Column(name = "before_contrast", nullable = false)
+  @Column(name = "before_contrast")
   private String beforeContrast;
 
   @CreatedDate
@@ -48,6 +48,6 @@ public class MonthlyReport {
   private Member member;
 
   @Builder.Default
-  @OneToMany(mappedBy = "monthlyReport", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "monthlyReport", cascade = CascadeType.ALL)
   private List<CategoryCost> categoryExpenseList = new ArrayList<>();
 }

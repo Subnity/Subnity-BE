@@ -29,5 +29,5 @@ public class CategoryCost {
   private String totalCost;
 
   @Column(name = "ratio", nullable = false)
-  private String ratio;
+  private int ratio;
 }
