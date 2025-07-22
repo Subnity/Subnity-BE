@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@ToString
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -26,7 +27,7 @@ public class CategoryCost {
   private SubscrCategory category;
 
   @Column(name = "total_cost", nullable = false)
-  private String totalCost;
+  private int totalCost;
 
   @Column(name = "ratio", nullable = false)
   private int ratio;

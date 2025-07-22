@@ -1,29 +1,27 @@
 package com.subnity.domain.monthly_report.controller.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "월 리포트 조회 응답 객체")
 public class GetMonthlyReportResponse {
 
   @Schema(description = "리포트 ID")
-  private Long reportId;
+  private long reportId;
 
   @Schema(description = "년")
   private int year;
 
   @Schema(description = "월")
-  private String month;
+  private int month;
 
   @Schema(description = "총 지출")
   private String totalPayment;
@@ -35,6 +33,6 @@ public class GetMonthlyReportResponse {
   private String beforeContrast;
 
   @Builder.Default
-  @Schema(description = "카테고리별 요금")
-  private List<GetCategoryExpenseResponse> categoryCosts = new ArrayList<>();
+  @Schema(description = "카테고리별 금액")
+  private List<GetCategoryExpenseResponse> categoryCostList = new ArrayList<>();
 }
