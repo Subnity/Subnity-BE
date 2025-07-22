@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "월 리포트 조회 응답 객체")
-public class DetailMonthlyReportResponse {
+public class GetMonthlyReportResponse {
 
   @Schema(description = "리포트 ID")
   private Long reportId;
@@ -36,5 +36,5 @@ public class DetailMonthlyReportResponse {
 
   @Builder.Default
   @Schema(description = "카테고리별 요금")
-  private List<DetailCategoryExpenseResponse> categoryCosts = new ArrayList<>();
+  private List<GetCategoryExpenseResponse> categoryCosts = new ArrayList<>();
 }
