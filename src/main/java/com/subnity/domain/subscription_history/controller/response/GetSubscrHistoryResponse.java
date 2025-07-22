@@ -13,10 +13,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "구독 히스토리 정보 조회 응답 객체")
-public class DetailSubscrHistoryResponse {
+public class GetSubscrHistoryResponse {
 
   @Schema(description = "구독 히스토리 ID")
-  private Long subscriptionHistoryId;
+  private long subscrHistoryId;
+
+  @Schema(description = "구독 ID")
+  private long subscrId;
 
   @Schema(description = "해지일")
   private LocalDate cancelDate;
