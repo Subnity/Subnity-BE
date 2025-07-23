@@ -2,6 +2,7 @@ package com.subnity.domain.monthly_report.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.subnity.domain.monthly_report.MonthlyReport;
 import com.subnity.domain.monthly_report.controller.response.GetMonthlyReportResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,20 +20,8 @@ public class MonthlyReportRepository {
    * @param month : 달
    * @return : 해당 월의 리포트 반환
    */
-  public GetMonthlyReportResponse getMonthlyReportByMonth(String memberId, int month) {
-    return queryFactory.select(
-      Projections.fields(
-        GetMonthlyReportResponse.class,
-        monthlyReport.reportId,
-        monthlyReport.year,
-        monthlyReport.month,
-        monthlyReport.totalPayment,
-        monthlyReport.activeSubscrCount,
-        monthlyReport.beforeContrast,
-        monthlyReport.createdAt
-      )
-    )
-    .from(monthlyReport)
+  public MonthlyReport getMonthlyReportByMonth(String memberId, int month) {
+    return queryFactory.selectFrom(monthlyReport)
     .where(
       monthlyReport.month.eq(month),
       monthlyReport.member.memberId.eq(memberId)

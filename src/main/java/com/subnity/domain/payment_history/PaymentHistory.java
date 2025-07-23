@@ -6,6 +6,7 @@ import com.subnity.domain.subscription.Subscription;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +26,7 @@ public class PaymentHistory extends BaseTimeEntity {
   private String cost;
 
   @Column(name = "payment_date", nullable = false)
-  private LocalDateTime paymentDate;
+  private LocalDate paymentDate;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_status", nullable = false)

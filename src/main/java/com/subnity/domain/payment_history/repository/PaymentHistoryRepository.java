@@ -8,9 +8,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.subnity.domain.monthly_report.QCategoryCost.categoryCost;
 import static com.subnity.domain.payment_history.QPaymentHistory.paymentHistory;
 
 /**
@@ -112,5 +114,34 @@ public class PaymentHistoryRepository {
         paymentHistory.subscription.member.memberId.eq(memberId)
       )
       .fetch();
+  }
+
+  public List<GetPaymentHistoryResponse> paymentHistoryListByData(String memberId, LocalDate date) {
+    return queryFactory.select(
+        Projections.fields(
+          GetPaymentHistoryResponse.class,
+          paymentHistory.paymentHistoryId,
+          paymentHistory.subscription.subscriptionId.as("subscrId"),
+          paymentHistory.cost,
+          paymentHistory.paymentDate,
+          paymentHistory.paymentStatus
+        )
+      )
+      .from(paymentHistory)
+      .where(
+        paymentHistory.paymentDate.eq(date),
+        paymentHistory.subscription.member.memberId.eq(memberId)
+      )
+      .fetch();
+  }
+
+  @Transactional
+  public void deleteCategoryCostByData(long categoryCostId, int month) {
+    queryFactory.delete(categoryCost)
+      .where(
+        categoryCost.categoryExpenseId.eq(categoryCostId),
+        categoryCost.monthlyReport.month.eq(month)
+      )
+      .execute();
   }
 }

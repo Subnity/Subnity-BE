@@ -33,7 +33,7 @@ public class MonthlyReport {
   private int month;
 
   @Column(name = "total_payment")
-  private String totalPayment;
+  private int totalPayment;
 
   @Column(name = "active_subscription_count")
   private int activeSubscrCount;
