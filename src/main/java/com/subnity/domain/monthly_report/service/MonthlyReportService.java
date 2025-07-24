@@ -77,6 +77,11 @@ public class MonthlyReportService {
     if (activeSubscrList.isEmpty()) throw new GeneralException(ErrorStatus.NOT_FOUND, "구독 중인 목록을 찾을 수 없습니다.");
 
     // 2. 실제 결제가 일어난 활성화된 구독에서 카테고리별 구독 금액 계산하기
+
+    /*
+    PaymentHistory만 조회하면 그와 관련된 값들이 쫙라락!
+     */
+
     List<GetPaymentHistoryResponse> paymentHistoryList = paymentHistoryService.getPaymentHistoryList();
     paymentHistoryList.forEach(paymentHistory ->
       activeSubscrList.forEach(subscr -> {
@@ -168,7 +173,6 @@ public class MonthlyReportService {
                 if (this.categoryCost.get(category.name()) != null) {
                   System.out.println("여기 옴");
                   this.categoryCostRepository.deleteByMonthlyRepostId(monthlyReport.getReportId());
-                  this.categoryCost.clear();
                   this.categoryCost.put(
                     category.name(),
                     this.categoryCost.get(category.name()) + Integer.parseInt(subscr.getCost().replace(",", ""))
