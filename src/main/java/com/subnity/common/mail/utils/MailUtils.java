@@ -55,10 +55,10 @@ public class MailUtils {
 
   /**
    * 메일 발송 메서드
+   * @param member : 회원
    * @param text : 발송하고 싶은 메시지
    */
-  public static void sendMail(String text) {
-    Member member = getAuthMember();
+  public static void sendMail(Member member, String text) {
     SimpleMailMessage message = new SimpleMailMessage();
 
     message.setText(text);
