@@ -1,6 +1,7 @@
 package com.subnity.domain.payment_history.service;
 
 import com.subnity.auth.utils.SecurityUtils;
+import com.subnity.domain.payment_history.PaymentHistory;
 import com.subnity.domain.payment_history.controller.request.CreatePaymentHistoryRequest;
 import com.subnity.domain.payment_history.controller.response.GetPaymentHistoryResponse;
 import com.subnity.domain.payment_history.repository.JpaPaymentHistoryRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +28,7 @@ public class PaymentHistoryService {
    * @param request : 결제 히스토리 생성 요청 객체
    */
   public void createPaymentHistory(CreatePaymentHistoryRequest request) {
-    paymentHistoryRepository.save(request, LocalDateTime.now());
+    this.paymentHistoryRepository.save(request, LocalDateTime.now());
   }
 
   /**
@@ -35,7 +37,8 @@ public class PaymentHistoryService {
    * @return : 결제 히스토리 조회 응답 객체 반환
    */
   public GetPaymentHistoryResponse getPaymentHistory(String paymentHistoryId) {
-    return paymentHistoryRepository.paymentHistoryById(Long.parseLong(paymentHistoryId));
+    PaymentHistory paymentHistory = this.paymentHistoryRepository.paymentHistoryById(Long.parseLong(paymentHistoryId));
+    return PaymentHistory.from(paymentHistory);
   }
 
   /**
@@ -44,7 +47,12 @@ public class PaymentHistoryService {
    */
   public List<GetPaymentHistoryResponse> getPaymentHistoryList() {
     String memberId = SecurityUtils.getAuthMemberId();
-    return paymentHistoryRepository.paymentHistoryList(memberId);
+    List<PaymentHistory> paymentHistoryList = this.paymentHistoryRepository.paymentHistoryList(memberId);
+
+    List<GetPaymentHistoryResponse> paymentHistoryResponseList = new ArrayList<>();
+    paymentHistoryList.forEach(paymentHistory -> paymentHistoryResponseList.add(PaymentHistory.from(paymentHistory)));
+
+    return paymentHistoryResponseList;
   }
 
   /**
@@ -54,7 +62,12 @@ public class PaymentHistoryService {
    */
   public List<GetPaymentHistoryResponse> getPaymentHistoryListBySubscrId(String subscrId) {
     String memberId = SecurityUtils.getAuthMemberId();
-    return paymentHistoryRepository.paymentHistoryListBySubscrId(Long.parseLong(subscrId), memberId);
+    List<PaymentHistory> paymentHistoryList = this.paymentHistoryRepository.paymentHistoryListBySubscrId(Long.parseLong(subscrId), memberId);
+
+    List<GetPaymentHistoryResponse> paymentHistoryResponseList = new ArrayList<>();
+    paymentHistoryList.forEach(paymentHistory -> paymentHistoryResponseList.add(PaymentHistory.from(paymentHistory)));
+
+    return paymentHistoryResponseList;
   }
 
   /**
@@ -62,6 +75,6 @@ public class PaymentHistoryService {
    * @param paymentHistoryId : 결제 히스토리 ID
    */
   public void deletePaymentHistory(String paymentHistoryId) {
-    jpaPaymentHistoryRepository.deleteById(Long.parseLong(paymentHistoryId));
+    this.jpaPaymentHistoryRepository.deleteById(Long.parseLong(paymentHistoryId));
   }
 }

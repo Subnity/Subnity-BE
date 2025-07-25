@@ -3,11 +3,13 @@ package com.subnity.domain.payment_history;
 import com.subnity.common.domain.BaseTimeEntity;
 import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.domain.member.Member;
+import com.subnity.domain.payment_history.controller.response.GetPaymentHistoryResponse;
 import com.subnity.domain.payment_history.enums.PaymentStatus;
 import com.subnity.domain.subscription.Subscription;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 
 @Entity
@@ -45,4 +47,17 @@ public class PaymentHistory extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
   private Member member;
+
+
+  public static GetPaymentHistoryResponse from(PaymentHistory paymentHistory) {
+    DecimalFormat formatter = new DecimalFormat("#,###");
+
+    return GetPaymentHistoryResponse.builder()
+      .paymentHistoryId(paymentHistory.getPaymentHistoryId())
+      .subscrId(paymentHistory.subscription.getSubscriptionId())
+      .paymentStatus(paymentHistory.getPaymentStatus())
+      .paymentDate(paymentHistory.paymentDate.toLocalDate())
+      .cost(formatter.format(paymentHistory.getCost()))
+      .build();
+  }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,9 +45,7 @@ public class SubscrService {
         Subscription.builder()
           .platformName(request.platformName())
           .description(request.description())
-          .cost(
-            Long.parseLong(request.cost().replace(",", ""))
-          )
+          .cost(Long.parseLong(request.cost().replace(",", "")))
           .status(request.status())
           .category(request.category())
           .isNotification(request.isNotification())
@@ -66,16 +65,15 @@ public class SubscrService {
   /**
    * 특정 구독 조회 메서드
    * @param subscrId : 구독 ID
-   * @return : 구구독 정보 반환
+   * @return : 구독 정보 반환
    */
   public GetSubscrResponse getSubscr(String subscrId) {
     String memberId = SecurityUtils.getAuthMemberId();
-    GetSubscrResponse response = this.subscrRepository.findBySubscrId(Long.parseLong(subscrId), memberId);
-    if (response == null) {
-      throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독을 찾을 수 없습니다.");
-    }
+    Subscription subscrEntity = this.subscrRepository.findBySubscrId(Long.parseLong(subscrId), memberId);
 
-    return response;
+    if (subscrEntity == null) throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독을 찾을 수 없습니다.");
+
+    return Subscription.from(subscrEntity);
   }
 
   /**
@@ -84,12 +82,14 @@ public class SubscrService {
    */
   public List<GetSubscrResponse> getSubscrList() {
     String memberId = SecurityUtils.getAuthMemberId();
-    List<GetSubscrResponse> response = this.subscrRepository.subscrListByMemberId(memberId);
-    if (response.isEmpty()) {
-      throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독 목록을 찾을 수 없습니다.");
-    }
+    List<Subscription> subscrEntityList = this.subscrRepository.subscrListByMemberId(memberId);
 
-    return response;
+    if (subscrEntityList.isEmpty()) throw new GeneralException(ErrorStatus.KEY_NOT_EXIST, "구독 목록을 찾을 수 없습니다.");
+
+    List<GetSubscrResponse> subscrList = new ArrayList<>();
+    subscrEntityList.forEach(subscr -> subscrList.add(Subscription.from(subscr)));
+
+    return subscrList;
   }
 
   /**
@@ -123,11 +123,15 @@ public class SubscrService {
         String lastMonth = date.format(DateTimeFormatter.ofPattern("MM"));
         for (String m : MONTHS) {
           if (lastMonth.equals(m)) { // 31이 있는 달
-            nextPaymentDate = date.plusDays(31);
+            /*
+              31일에서 +1하는 이유는 스케줄러 때문입니다.
+              만약 결제일 밤 23시에 스케줄러가 돌아간다면 그 뒤 1시간동안 결제된 메일을 검색할 수 없기 때문에 00시에 전날(결제일) 메일을 검색할 수 있도록 31일에서 +1을 했습니다.
+             */
+            nextPaymentDate = date.plusDays(32);
             return nextPaymentDate;
           }
         }
-        nextPaymentDate = date.plusDays(30);
+        nextPaymentDate = date.plusDays(31);
         break;
       case YEAR:
         nextPaymentDate = date.plusYears(1);
