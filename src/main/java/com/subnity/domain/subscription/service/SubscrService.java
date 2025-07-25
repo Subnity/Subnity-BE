@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubscrService {
   /* 31일이 있는 달 */
-  private final int[] MONTHS = { 1, 3, 5, 7, 8, 10, 12 };
+  private final String[] MONTHS = { "01", "03", "05", "07", "08", "10", "12" };
 
   private final JpaSubscrRepository jpaRepository;
   private final SubscrRepository subscrRepository;
@@ -119,13 +119,13 @@ public class SubscrService {
     switch (paymentCycle) {
       case MONTH:
         String lastMonth = date.format(DateTimeFormatter.ofPattern("MM"));
-        for (int m : MONTHS) {
-          if (lastMonth.contains(String.valueOf(m))) {
+        for (String m : MONTHS) {
+          if (lastMonth.equals(m)) { // 31이 있는 달
             nextPaymentDate = date.plusDays(31);
-          } else {
-            nextPaymentDate = date.plusDays(30);
+            return nextPaymentDate;
           }
         }
+        nextPaymentDate = date.plusDays(30);
         break;
       case YEAR:
         nextPaymentDate = date.plusYears(1);

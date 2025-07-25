@@ -116,7 +116,7 @@ public class PaymentHistoryRepository {
       .fetch();
   }
 
-  public List<GetPaymentHistoryResponse> paymentHistoryListByData(String memberId, LocalDate date) {
+  public List<GetPaymentHistoryResponse> paymentHistoryListByData(String memberId, LocalDateTime date) {
     return queryFactory.select(
         Projections.fields(
           GetPaymentHistoryResponse.class,

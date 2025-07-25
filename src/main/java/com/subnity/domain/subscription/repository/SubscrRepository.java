@@ -3,6 +3,7 @@ package com.subnity.domain.subscription.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.subnity.common.utils.enums.SubscrStatus;
+import com.subnity.domain.subscription.Subscription;
 import com.subnity.domain.subscription.controller.response.GetActiveSubscrDto;
 import com.subnity.domain.subscription.controller.request.UpdateSubscrRequest;
 import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
@@ -10,6 +11,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.subnity.domain.subscription.QSubscription.subscription;
@@ -117,6 +119,12 @@ public class SubscrRepository {
       )
       .from(subscription)
       .where(subscription.status.eq(SubscrStatus.ACTIVITY))
+      .fetch();
+  }
+
+  public List<Subscription> findSubscrListByDate(LocalDate date) {
+    return queryFactory.selectFrom(subscription)
+      .where(subscription.nextPaymentDate.eq(date))
       .fetch();
   }
 }

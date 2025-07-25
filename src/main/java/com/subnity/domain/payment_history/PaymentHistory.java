@@ -1,6 +1,7 @@
 package com.subnity.domain.payment_history;
 
 import com.subnity.common.domain.BaseTimeEntity;
+import com.subnity.domain.member.Member;
 import com.subnity.domain.payment_history.enums.PaymentStatus;
 import com.subnity.domain.subscription.Subscription;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class PaymentHistory extends BaseTimeEntity {
   private String cost;
 
   @Column(name = "payment_date", nullable = false)
-  private LocalDate paymentDate;
+  private LocalDateTime paymentDate;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_status", nullable = false)
@@ -35,4 +37,8 @@ public class PaymentHistory extends BaseTimeEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "subscription_id", nullable = false)
   private Subscription subscription;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id", nullable = false)
+  private Member member;
 }

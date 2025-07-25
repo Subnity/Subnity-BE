@@ -2,8 +2,6 @@ package com.subnity.common.mail.utils;
 
 import com.subnity.auth.utils.SecurityUtils;
 import com.subnity.common.mail.GmailClient;
-import com.subnity.common.api_response.exception.GeneralException;
-import com.subnity.common.api_response.status.ErrorStatus;
 import com.subnity.common.mail.dto.SearchMailDto;
 import com.subnity.common.mail.response.SearchMail;
 import com.subnity.domain.member.Member;
@@ -22,6 +20,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -93,7 +92,7 @@ public class MailUtils {
         // bodySize가 0이면 데이터가 들어있지 않은걸로 간주
         if (bodySize != 0) {
           String amount = paymentAmount(body);
-          LocalDate date = paymentDate(body);
+          LocalDateTime date = paymentDate(body);
 
           if (amount != null && date != null) {
             switch (dto.getCycle()) {
@@ -170,7 +169,7 @@ public class MailUtils {
    * @param body : Gmail API body 부분
    * @return : 결제 날짜를 반환
    */
-  private static LocalDate paymentDate(Map<String, Object> body) {
+  private static LocalDateTime paymentDate(Map<String, Object> body) {
     LocalDate responseDate = null;
 
     // 결제 날짜 찾기
@@ -192,10 +191,11 @@ public class MailUtils {
         );
 
         responseDate = LocalDate.of(year, month, day);
+        return responseDate.atStartOfDay();
       }
     }
 
-    return responseDate;
+    return null;
   }
 
   /**
