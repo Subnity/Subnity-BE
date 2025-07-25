@@ -32,7 +32,8 @@ public class MailService {
    * (스케줄러는 매일 새벽 00시 02분에 돌아감)
    */
   @Transactional
-  @Scheduled(cron = "00 59 21 * * *") // 00:02
+//  @Scheduled(cron = "00 02 00 * * *") // 00:02
+  @Scheduled(cron = "00 20 22 * * *") // 테스트
   public void mailSearchScheduler() {
     LocalDate now = LocalDate.now();
     // 해당 날짜와 구독 날짜가 동일한 구독 목록을 모두 조회
