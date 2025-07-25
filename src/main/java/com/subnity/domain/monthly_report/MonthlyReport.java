@@ -2,7 +2,6 @@ package com.subnity.domain.monthly_report;
 
 import com.subnity.domain.member.Member;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,10 +32,7 @@ public class MonthlyReport {
   private int month;
 
   @Column(name = "total_payment")
-  private int totalPayment;
-
-  @Column(name = "active_subscription_count")
-  private int activeSubscrCount;
+  private long totalPayment;
 
   @Column(name = "before_contrast")
   private String beforeContrast;

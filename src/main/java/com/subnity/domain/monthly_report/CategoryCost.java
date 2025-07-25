@@ -10,7 +10,7 @@ import lombok.*;
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "category_expense")
+@Table(name = "category_cost")
 public class CategoryCost {
 
   @Id
