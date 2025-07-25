@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -26,7 +26,7 @@ public class GetPaymentHistoryResponse {
   private String cost;
 
   @Schema(description = "결제일")
-  private LocalDateTime paymentDate;
+  private LocalDate paymentDate;
 
   @Schema(description = "결제 상태")
   private PaymentStatus paymentStatus;

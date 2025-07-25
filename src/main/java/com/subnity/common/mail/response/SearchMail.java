@@ -3,7 +3,7 @@ package com.subnity.common.mail.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -17,5 +17,5 @@ public class SearchMail {
   private String cost;
 
   @Schema(description = "결제일")
-  private LocalDate paymentDate;
+  private LocalDateTime paymentDate;
 }

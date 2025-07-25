@@ -6,10 +6,12 @@ import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.common.utils.enums.SubscrStatus;
 import com.subnity.domain.member.Member;
 import com.subnity.domain.payment_history.PaymentHistory;
+import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
 import com.subnity.domain.subscription.enums.PaymentCycle;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ public class Subscription extends BaseTimeEntity {
   private String description;
 
   @Column(name = "cost", nullable = false)
-  private String cost;
+  private long cost;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_cycle", nullable = false)
@@ -68,4 +70,23 @@ public class Subscription extends BaseTimeEntity {
   @Builder.Default
   @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
   private List<PaymentHistory> paymentHistoryList = new ArrayList<>();
+
+
+  public static GetSubscrResponse from(Subscription subscr) {
+    DecimalFormat formatter = new DecimalFormat("#,###");
+
+    return GetSubscrResponse.builder()
+      .subscrId(subscr.getSubscriptionId())
+      .platformName(subscr.getPlatformName())
+      .description(subscr.getDescription())
+      .cost(formatter.format(subscr.cost))
+      .paymentCycle(subscr.getPaymentCycle())
+      .status(subscr.getStatus())
+      .category(subscr.getCategory())
+      .isNotification(subscr.getIsNotification())
+      .cancelledAt(subscr.getCancelledAt())
+      .lastPaymentDate(subscr.getLastPaymentDate())
+      .nextPaymentDate(subscr.getNextPaymentDate())
+      .build();
+  }
 }

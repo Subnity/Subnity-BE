@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "카테고리별 요금 조회 응답 객체")
-public class DetailCategoryExpenseResponse {
+public class GetCategoryExpenseResponse {
 
   @Schema(description = "카테고리별 요금 ID")
   private Long categoryExpenseId;

@@ -1,13 +1,13 @@
 package com.subnity.domain.subscription.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.subnity.domain.subscription.Subscription;
 import com.subnity.domain.subscription.controller.request.UpdateSubscrRequest;
-import com.subnity.domain.subscription.controller.response.GetSubscrResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.subnity.domain.subscription.QSubscription.subscription;
@@ -26,24 +26,8 @@ public class SubscrRepository {
    * @param memberId : 회원 ID
    * @return : 특정 구독 반환
    */
-  public GetSubscrResponse findBySubscrId(Long subscrId, String memberId) {
-    return queryFactory.select(
-        Projections.fields(
-          GetSubscrResponse.class,
-          subscription.subscriptionId.as("subscrId"),
-          subscription.platformName,
-          subscription.description,
-          subscription.cost,
-          subscription.paymentCycle,
-          subscription.status,
-          subscription.category,
-          subscription.isNotification,
-          subscription.lastPaymentDate,
-          subscription.nextPaymentDate,
-          subscription.member.memberId
-        )
-      )
-      .from(subscription)
+  public Subscription findBySubscrId(Long subscrId, String memberId) {
+    return queryFactory.selectFrom(subscription)
       .where(
         subscription.member.memberId.eq(memberId),
         subscription.subscriptionId.eq(subscrId)
@@ -56,24 +40,8 @@ public class SubscrRepository {
    * @param memberId : 회원 ID
    * @return : 구독 목록 반환
    */
-  public List<GetSubscrResponse> subscrListByMemberId(String memberId) {
-    return queryFactory.select(
-      Projections.fields(
-        GetSubscrResponse.class,
-        subscription.subscriptionId.as("subscrId"),
-        subscription.platformName,
-        subscription.description,
-        subscription.cost,
-        subscription.paymentCycle,
-        subscription.status,
-        subscription.category,
-        subscription.isNotification,
-        subscription.lastPaymentDate,
-        subscription.nextPaymentDate,
-        subscription.member.memberId
-      )
-    )
-    .from(subscription)
+  public List<Subscription> subscrListByMemberId(String memberId) {
+    return queryFactory.selectFrom(subscription)
     .where(subscription.member.memberId.eq(memberId))
     .fetch();
   }
@@ -88,7 +56,7 @@ public class SubscrRepository {
     queryFactory.update(subscription)
       .set(subscription.platformName, request.platformName())
       .set(subscription.description, request.description())
-      .set(subscription.cost, request.cost())
+      .set(subscription.cost, Long.parseLong(request.cost().replace(",", "")))
       .set(subscription.category, request.category())
       .set(subscription.isNotification, request.isNotification())
       .where(
@@ -96,5 +64,16 @@ public class SubscrRepository {
         subscription.subscriptionId.eq(Long.parseLong(request.subscrId()))
       )
       .execute();
+  }
+
+  /**
+   * 현재 날짜와 결제 날짜가 같은 구독 목록을 조회
+   * @param date : 다음 결제일
+   * @return : 구독 목록을 반환
+   */
+  public List<Subscription> findSubscrListByDate(LocalDate date) {
+    return queryFactory.selectFrom(subscription)
+      .where(subscription.nextPaymentDate.eq(date))
+      .fetch();
   }
 }

@@ -43,6 +43,7 @@ dependencies {
     implementation 'org.apache.poi:poi-ooxml:5.4.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation "org.junit.jupiter:junit-jupiter"
     implementation 'org.jsoup:jsoup:1.17.2'
 
     // OAuth2 Client

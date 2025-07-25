@@ -2,6 +2,7 @@ package com.subnity.domain.monthly_report;
 
 import com.subnity.domain.member.Member;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@ToString
 @Builder(toBuilder = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -25,18 +27,18 @@ public class MonthlyReport {
   private Long reportId;
 
   @Column(name = "year", nullable = false)
-  private Integer year;
+  private int year;
 
   @Column(name = "month", nullable = false)
-  private String month;
+  private int month;
 
-  @Column(name = "total_payment", nullable = false)
-  private String totalPayment;
+  @Column(name = "total_payment")
+  private int totalPayment;
 
-  @Column(name = "active_subscription_count", nullable = false)
+  @Column(name = "active_subscription_count")
   private int activeSubscrCount;
 
-  @Column(name = "before_contrast", nullable = false)
+  @Column(name = "before_contrast")
   private String beforeContrast;
 
   @CreatedDate
@@ -48,6 +50,6 @@ public class MonthlyReport {
   private Member member;
 
   @Builder.Default
-  @OneToMany(mappedBy = "monthlyReport", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "monthlyReport", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<CategoryCost> categoryExpenseList = new ArrayList<>();
 }

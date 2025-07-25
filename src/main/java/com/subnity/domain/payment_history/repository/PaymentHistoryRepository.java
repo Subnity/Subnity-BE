@@ -1,9 +1,8 @@
 package com.subnity.domain.payment_history.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.subnity.domain.payment_history.PaymentHistory;
 import com.subnity.domain.payment_history.controller.request.CreatePaymentHistoryRequest;
-import com.subnity.domain.payment_history.controller.response.GetPaymentHistoryResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -52,18 +51,8 @@ public class PaymentHistoryRepository {
    * @param paymentHistoryId : 결제 히스토리 ID
    * @return : 특정 결제 히스토리 반환
    */
-  public GetPaymentHistoryResponse paymentHistoryById(long paymentHistoryId) {
-    return queryFactory.select(
-      Projections.fields(
-        GetPaymentHistoryResponse.class,
-        paymentHistory.paymentHistoryId,
-        paymentHistory.subscription.subscriptionId.as("subscrId"),
-        paymentHistory.cost,
-        paymentHistory.paymentDate,
-        paymentHistory.paymentStatus
-      )
-    )
-    .from(paymentHistory)
+  public PaymentHistory paymentHistoryById(long paymentHistoryId) {
+    return queryFactory.selectFrom(paymentHistory)
     .where(paymentHistory.paymentHistoryId.eq(paymentHistoryId))
     .fetchOne();
   }
@@ -73,18 +62,8 @@ public class PaymentHistoryRepository {
    * @param memberId : 회원 ID
    * @return : 결제 히스토리 목록 반환
    */
-  public List<GetPaymentHistoryResponse> paymentHistoryList(String memberId) {
-    return queryFactory.select(
-      Projections.fields(
-        GetPaymentHistoryResponse.class,
-        paymentHistory.paymentHistoryId,
-        paymentHistory.subscription.subscriptionId.as("subscrId"),
-        paymentHistory.cost,
-        paymentHistory.paymentDate,
-        paymentHistory.paymentStatus
-      )
-    )
-    .from(paymentHistory)
+  public List<PaymentHistory> paymentHistoryList(String memberId) {
+    return queryFactory.selectFrom(paymentHistory)
     .where(paymentHistory.subscription.member.memberId.eq(memberId))
     .fetch();
   }
@@ -95,18 +74,8 @@ public class PaymentHistoryRepository {
    * @param memberId : 회원 ID
    * @return : 결제 히스토리 목록 반환
    */
-  public List<GetPaymentHistoryResponse> paymentHistoryListBySubscrId(long subscrId, String memberId) {
-    return queryFactory.select(
-        Projections.fields(
-          GetPaymentHistoryResponse.class,
-          paymentHistory.paymentHistoryId,
-          paymentHistory.subscription.subscriptionId.as("subscrId"),
-          paymentHistory.cost,
-          paymentHistory.paymentDate,
-          paymentHistory.paymentStatus
-        )
-      )
-      .from(paymentHistory)
+  public List<PaymentHistory> paymentHistoryListBySubscrId(long subscrId, String memberId) {
+    return queryFactory.selectFrom(paymentHistory)
       .where(
         paymentHistory.subscription.subscriptionId.eq(subscrId),
         paymentHistory.subscription.member.memberId.eq(memberId)
