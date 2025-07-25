@@ -34,7 +34,7 @@ public class Subscription extends BaseTimeEntity {
   private String description;
 
   @Column(name = "cost", nullable = false)
-  private String cost;
+  private long cost;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_cycle", nullable = false)

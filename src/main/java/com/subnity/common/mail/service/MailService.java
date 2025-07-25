@@ -27,7 +27,7 @@ public class MailService {
   /**
    * 다음 결제일로 판단 (스케줄러는 매일 밤 23시 30분에 돌리는 걸로)
    */
-  @Scheduled(cron = "0 15 11 * * *")
+  @Scheduled(cron = "0 21 11 * * *")
   @Transactional
   public void scheduler() {
     LocalDate now = LocalDate.now();

@@ -44,7 +44,9 @@ public class SubscrService {
         Subscription.builder()
           .platformName(request.platformName())
           .description(request.description())
-          .cost(request.cost())
+          .cost(
+            Long.parseLong(request.cost().replace(",", ""))
+          )
           .status(request.status())
           .category(request.category())
           .isNotification(request.isNotification())

@@ -92,7 +92,7 @@ public class SubscrRepository {
     queryFactory.update(subscription)
       .set(subscription.platformName, request.platformName())
       .set(subscription.description, request.description())
-      .set(subscription.cost, request.cost())
+      .set(subscription.cost, Long.parseLong(request.cost().replace(",", "")))
       .set(subscription.category, request.category())
       .set(subscription.isNotification, request.isNotification())
       .where(
