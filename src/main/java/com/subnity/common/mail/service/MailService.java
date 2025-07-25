@@ -27,7 +27,7 @@ public class MailService {
   /**
    * 다음 결제일로 판단 (스케줄러는 매일 밤 23시 30분에 돌리는 걸로)
    */
-  @Scheduled(cron = "0 30 23 * * *")
+  @Scheduled(cron = "0 15 11 * * *")
   @Transactional
   public void scheduler() {
     LocalDate now = LocalDate.now();
@@ -50,8 +50,11 @@ public class MailService {
         this.jpaPaymentHistoryRepository.save(
           PaymentHistory.builder()
             .paymentStatus(PaymentStatus.SUCCESS)
-            .cost(mail.getCost())
+            .cost(
+              Long.parseLong(mail.getCost().replace(",", ""))
+            )
             .paymentDate(mail.getPaymentDate())
+            .category(subscr.getCategory())
             .subscription(subscr)
             .member(subscr.getMember())
             .build()
