@@ -29,11 +29,11 @@ public class MailService {
 
   /**
    * 실제 결제가 일어난 메일을 검색하는 스케줄러
-   * (스케줄러는 매일 새벽 00시 02분에 돌아감)
+   * (스케줄러는 매일 새벽 00시 01분에 돌아감)
    */
   @Transactional
-//  @Scheduled(cron = "00 02 00 * * *") // 00:02
-  @Scheduled(cron = "00 05 14 * * *") // 테스트
+//  @Scheduled(cron = "00 01 00 * * *") // 00:01
+  @Scheduled(cron = "00 05 14 * * *") // 테스트 <------ 이거 나중에 삭제해야함!!
   public void mailSearchScheduler() {
     LocalDate now = LocalDate.now();
     // 해당 날짜와 구독 날짜가 동일한 구독 목록을 모두 조회

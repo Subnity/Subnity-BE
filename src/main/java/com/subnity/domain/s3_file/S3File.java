@@ -23,7 +23,7 @@ public class S3File {
   private String fileName;
 
   @Column(name = "file_size", nullable = false)
-  private String fileSize;
+  private long fileSize;
 
   @Column(name = "s3_url", nullable = false)
   private String s3Url;
