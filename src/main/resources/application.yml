@@ -41,7 +41,7 @@ spring:
         secret-key: ${AWS_SECRET_KEY}
       s3:
         bucket: ${AWS_S3_BUCKET}
-        default-profile-url: ${PROFILE_URL}
+        default-profile-url: ${DEFAULT_PROFILE_URL}
       region:
         static: ap-northeast-2
 
