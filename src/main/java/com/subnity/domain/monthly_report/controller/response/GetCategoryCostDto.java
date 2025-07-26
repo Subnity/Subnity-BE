@@ -17,7 +17,4 @@ public class GetCategoryCostDto {
 
   @Schema(description = "총 금액")
   private String totalCost;
-
-  @Schema(description = "비율")
-  private int ratio;
 }

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
+/**
+ * MonthlyReportController : 월간 리포트 관련 Controller
+ */
 @RestController
 @RequestMapping(value = "/report")
 @RequiredArgsConstructor
@@ -20,6 +23,11 @@ import java.time.LocalDate;
 public class MonthlyReportController {
   private final MonthlyReportService monthlyReportService;
 
+  /**
+   * 월간 리포트 조회 엔드포인트
+   * @param date : 조회하고 싶은 날짜
+   * @return : 해당 날짜에 대한 지출 리포트 반환
+   */
   @GetMapping(value = "")
   @Operation(summary = "월간 리포트 조회", description = "월간 리포트 조회 엔드포인트")
   public ApiResponse<GetMonthlyReportResponse> monthlyReport(@RequestParam LocalDate date) {
