@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,7 +31,7 @@ public class PaymentHistory extends BaseTimeEntity {
   private long cost;
 
   @Column(name = "payment_date", nullable = false)
-  private LocalDateTime paymentDate;
+  private LocalDate paymentDate;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "payment_status", nullable = false)
@@ -56,7 +57,7 @@ public class PaymentHistory extends BaseTimeEntity {
       .paymentHistoryId(paymentHistory.getPaymentHistoryId())
       .subscrId(paymentHistory.subscription.getSubscriptionId())
       .paymentStatus(paymentHistory.getPaymentStatus())
-      .paymentDate(paymentHistory.paymentDate.toLocalDate())
+      .paymentDate(paymentHistory.paymentDate)
       .cost(formatter.format(paymentHistory.getCost()))
       .build();
   }

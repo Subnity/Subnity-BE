@@ -12,12 +12,6 @@ import lombok.*;
 @Schema(description = "카테고리별 금액 조회 Dto 객체")
 public class GetCategoryCostDto {
 
-  @Schema(description = "카테고리별 비용 ID")
-  private long categoryCostId;
-
-  @Schema(description = "월 리포트 ID")
-  private long monthlyReportId;
-
   @Schema(description = "구독 카테고리")
   private SubscrCategory category;
 

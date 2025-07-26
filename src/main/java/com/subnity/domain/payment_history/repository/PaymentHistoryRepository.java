@@ -1,12 +1,16 @@
 package com.subnity.domain.payment_history.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.subnity.domain.payment_history.PaymentHistory;
 import com.subnity.domain.payment_history.controller.request.CreatePaymentHistoryRequest;
+import com.subnity.domain.payment_history.controller.response.PaymentCategoryCostDto;
+import com.subnity.domain.payment_history.controller.response.PaymentTotalCostDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,6 +22,7 @@ import static com.subnity.domain.payment_history.QPaymentHistory.paymentHistory;
 @Repository
 @RequiredArgsConstructor
 public class PaymentHistoryRepository {
+  private final int[] MONTHS = { 1, 3, 5, 7, 8, 10, 12 };
   private final JPAQueryFactory queryFactory;
 
   /**
@@ -80,6 +85,67 @@ public class PaymentHistoryRepository {
         paymentHistory.subscription.subscriptionId.eq(subscrId),
         paymentHistory.subscription.member.memberId.eq(memberId)
       )
+      .fetch();
+  }
+
+  public PaymentTotalCostDto paymentTotalCostByMemberId(String memberId, LocalDate date) {
+    LocalDate nextDate = null;
+    for (int month : MONTHS) {
+      if (month == date.getMonthValue()) {
+        nextDate = LocalDate.of(date.getYear(), date.getMonth(), 31);
+      } else {
+        if (!(nextDate != null && nextDate.getDayOfMonth() == 31)) {
+          nextDate = LocalDate.of(date.getYear(), date.getMonth(), 30);
+        }
+      }
+    }
+
+    return queryFactory.select(
+      Projections.fields(
+        PaymentTotalCostDto.class,
+        paymentHistory.cost.sum().as("totalCost")
+      )
+    )
+    .from(paymentHistory)
+    .where(
+      paymentHistory.member.memberId.eq(memberId),
+      paymentHistory.paymentDate.between(
+        LocalDate.of(date.getYear(), date.getMonth(), 1),
+        nextDate
+      )
+    )
+    .groupBy(paymentHistory.cost)
+    .fetchOne();
+  }
+
+  public List<PaymentCategoryCostDto> paymentCategoryCostByMemberId(String memberId, LocalDate date) {
+    LocalDate nextDate = null;
+    for (int month : MONTHS) {
+      if (month == date.getMonthValue()) {
+        nextDate = LocalDate.of(date.getYear(), date.getMonth(), 31);
+      } else {
+        if (!(nextDate != null && nextDate.getDayOfMonth() == 31)) {
+          nextDate = LocalDate.of(date.getYear(), date.getMonth(), 30);
+        }
+      }
+    }
+
+    return queryFactory.select(
+        Projections.fields(
+          PaymentCategoryCostDto.class,
+          paymentHistory.cost.sum().as("totalCost"),
+          paymentHistory.subscription.category.as("category")
+        )
+      )
+      .from(paymentHistory)
+      .where(
+        paymentHistory.member.memberId.eq(memberId),
+        paymentHistory.paymentDate.between(
+          LocalDate.of(date.getYear(), date.getMonth(), 1),
+          nextDate
+        )
+      )
+      .groupBy(paymentHistory.subscription.category)
       .fetch();
   }
 }

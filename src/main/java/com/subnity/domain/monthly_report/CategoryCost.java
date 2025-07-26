@@ -27,8 +27,5 @@ public class CategoryCost {
   private SubscrCategory category;
 
   @Column(name = "total_cost", nullable = false)
-  private int totalCost;
-
-  @Column(name = "ratio", nullable = false)
-  private int ratio;
+  private long totalCost;
 }

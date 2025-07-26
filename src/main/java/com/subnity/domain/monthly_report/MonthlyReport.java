@@ -25,17 +25,14 @@ public class MonthlyReport {
   @Column(name = "report_id", nullable = false)
   private Long reportId;
 
-  @Column(name = "year", nullable = false)
+  @Column(name = "year")
   private int year;
 
-  @Column(name = "month", nullable = false)
+  @Column(name = "month")
   private int month;
 
   @Column(name = "total_payment")
   private long totalPayment;
-
-  @Column(name = "before_contrast")
-  private String beforeContrast;
 
   @CreatedDate
   @Column(name = "created_at", nullable = false)
@@ -47,5 +44,5 @@ public class MonthlyReport {
 
   @Builder.Default
   @OneToMany(mappedBy = "monthlyReport", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-  private List<CategoryCost> categoryExpenseList = new ArrayList<>();
+  private List<CategoryCost> categoryCostList = new ArrayList<>();
 }
