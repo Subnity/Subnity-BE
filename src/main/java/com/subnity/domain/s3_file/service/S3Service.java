@@ -2,12 +2,15 @@ package com.subnity.domain.s3_file.service;
 
 import com.subnity.common.api_response.exception.GeneralException;
 import com.subnity.common.api_response.status.ErrorStatus;
+import com.subnity.domain.s3_file.S3File;
+import com.subnity.domain.s3_file.repository.S3FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -21,8 +24,13 @@ public class S3Service {
   private String bucket;
 
   private final S3Client s3Client;
+  private final S3FileRepository s3FileRepository;
 
-  // 파일 업로드
+  /**
+   * S3 파일 업로드 메서드
+   * @param file : 파일
+   * @return : 업로드된 S3 URL 반환
+   */
   public String uploadFile(MultipartFile file) {
     String originalFileName = file.getOriginalFilename();
     String fileName = UUID.randomUUID() + "-" + originalFileName;
@@ -40,10 +48,33 @@ public class S3Service {
       throw new GeneralException(ErrorStatus.INTERNAL_ERROR, "파일 업로드에 실패했습니다.");
     }
 
-    return String.format("https://%s.s3.ap-northeast-2.amazonaws.com/%s", bucket, fileName);
+    String s3FileUrl = String.format("https://%s.s3.ap-northeast-2.amazonaws.com/%s", bucket, fileName);
+
+    this.s3FileRepository.save(
+      S3File.builder()
+        .fileName(fileName)
+        .originalName(originalFileName)
+        .s3Url(s3FileUrl)
+        .fileSize(file.getSize())
+        .build()
+    );
+
+    return s3FileUrl;
   }
 
-  // 파일 조회
+  /**
+   * S3 파일 삭제 메서드
+   * @param fileUrl : S3 URL
+   */
+  public void deleteFile(String fileUrl) {
+    String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 
-  // 파일 삭제
+    DeleteBucketRequest deleteBucketRequest = DeleteBucketRequest.builder()
+      .bucket(bucket)
+      .bucket(fileName)
+      .build();
+
+    s3Client.deleteBucket(deleteBucketRequest);
+    this.s3FileRepository.deleteByS3Url(fileUrl);
+  }
 }
