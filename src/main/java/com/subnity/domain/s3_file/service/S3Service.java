@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteBucketRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.util.UUID;
@@ -38,7 +38,6 @@ public class S3Service {
     PutObjectRequest putObjectRequest = PutObjectRequest.builder()
       .bucket(bucket)
       .key(fileName)
-      .acl(ObjectCannedACL.PUBLIC_READ)
       .contentType(file.getContentType())
       .build();
 
@@ -69,12 +68,12 @@ public class S3Service {
   public void deleteFile(String fileUrl) {
     String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
 
-    DeleteBucketRequest deleteBucketRequest = DeleteBucketRequest.builder()
+    DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
       .bucket(bucket)
-      .bucket(fileName)
+      .key(fileName)
       .build();
 
-    s3Client.deleteBucket(deleteBucketRequest);
+    s3Client.deleteObject(deleteObjectRequest);
     this.s3FileRepository.deleteByS3Url(fileUrl);
   }
 }
