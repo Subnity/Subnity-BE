@@ -32,6 +32,9 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   @Value("${server.site_url}")
   private String siteUrl;
 
+  @Value("${default-profile-url}")
+  private String defaultProfileUrl;
+
   /**
    * OAuth2 인증에 성공할 경우 실행될 메서드
    * @param request : HttpServletRequest 객체
@@ -62,7 +65,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
           .memberId(user.getId())
           .name(user.getName())
           .role(role)
-          .profileUrl("") // 추후에 추가 예정
+          .profileUrl(defaultProfileUrl)
           .isNotification(true)
           .mail(user.getEmail())
           .mailToken(user.getAccessToken())
