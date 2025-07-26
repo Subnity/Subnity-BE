@@ -33,7 +33,7 @@ public class MailService {
    */
   @Transactional
 //  @Scheduled(cron = "00 02 00 * * *") // 00:02
-  @Scheduled(cron = "00 20 22 * * *") // 테스트
+  @Scheduled(cron = "00 05 14 * * *") // 테스트
   public void mailSearchScheduler() {
     LocalDate now = LocalDate.now();
     // 해당 날짜와 구독 날짜가 동일한 구독 목록을 모두 조회
@@ -55,7 +55,7 @@ public class MailService {
           PaymentHistory.builder()
             .paymentStatus(PaymentStatus.SUCCESS)
             .cost(Long.parseLong(mail.getCost().replace(",", "")))
-            .paymentDate(mail.getPaymentDate())
+            .paymentDate(mail.getPaymentDate().toLocalDate())
             .category(subscr.getCategory())
             .subscription(subscr)
             .member(subscr.getMember())
