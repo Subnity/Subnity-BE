@@ -27,5 +27,4 @@ public class GetActiveSubscrDto {
 
   @Schema(description = "구독 카테고리")
   private SubscrCategory category;
-
 }

@@ -65,7 +65,7 @@ public class PaymentHistoryRepository {
    * @param memberId : 회원 ID
    * @return : 결제 히스토리 목록 반환
    */
-  public List<PaymentHistory> paymentHistoryList(String memberId) {
+  public List<PaymentHistory> paymentHistoryListByMemberId(String memberId) {
     return queryFactory.selectFrom(paymentHistory)
     .where(paymentHistory.subscription.member.memberId.eq(memberId))
     .fetch();

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * EnumService : Enum 관련 Service
+ */
 @Service
 public class EnumService {
 

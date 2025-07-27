@@ -36,15 +36,6 @@ public class MemberService {
   }
 
   /**
-   * Scheduler ID 수정 메서드
-   * @param schedulerId : Scheduler ID
-   */
-  public void updateSchedulerId(String schedulerId) {
-    String memberId = SecurityUtils.getAuthMemberId();
-    memberRepository.updateSchedulerId(schedulerId, memberId);
-  }
-
-  /**
    * 회원 정보(데이터) 영구 삭제 메서드
    */
   public void deleteMember() {

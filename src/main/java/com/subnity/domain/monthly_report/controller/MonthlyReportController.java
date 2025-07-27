@@ -17,7 +17,7 @@ import java.time.LocalDate;
  * MonthlyReportController : 월간 리포트 관련 Controller
  */
 @RestController
-@RequestMapping(value = "/report")
+@RequestMapping(value = "/monthly-report")
 @RequiredArgsConstructor
 @Tag(name = "Monthly Report", description = "월간 리포트 관련 API")
 public class MonthlyReportController {

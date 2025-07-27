@@ -46,9 +46,6 @@ public class Member extends BaseTimeEntity {
   @Column(name = "mail_token")
   private String mailToken;
 
-  @Column(name = "scheduler_id")
-  private String schedulerId;
-
   @Builder.Default
   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
   private List<Subscription> subscriptionList = new ArrayList<>();

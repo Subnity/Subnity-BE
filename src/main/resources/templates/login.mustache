@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
-    <title>구글 로그인 페이지</title>
+    <title>Subnity</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -80,10 +80,10 @@
 
                 if (accessToken === undefined) {
                     localStorage.clear();
-                    console.log("로그인 실패");
+                    console.log("Google login failed");
                 } else {
-                    localStorage.setItem("UT", accessToken);
-                    console.log("로그인 성공");
+                    localStorage.setItem("x-subnity-access-token", accessToken);
+                    console.log("Google login successful");
                 }
             });
         }
