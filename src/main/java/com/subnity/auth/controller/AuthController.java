@@ -1,7 +1,7 @@
 package com.subnity.auth.controller;
 
 import com.subnity.common.api_response.ApiResponse;
-import com.subnity.auth.controller.response.CreateAccessTokenResponse;
+import com.subnity.auth.controller.response.GetAccessTokenResponse;
 import com.subnity.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +26,11 @@ public class AuthController {
   @PostMapping(value = "/refresh")
   @Operation(summary = "Access Token 재발급", description = "Access Token 재발급 엔드포인트</br>" +
     "* 반드시 Authorization 헤더가 필요합니다.")
-  public ApiResponse<CreateAccessTokenResponse> recreateAccessToken(
-    @CookieValue(value = "RT", required = false) String refreshToken
+  public ApiResponse<GetAccessTokenResponse> recreateAccessToken(
+    @CookieValue(value = "x-subnity-token", required = false) String refreshToken
   ) {
     return ApiResponse.onSuccess(
-      CreateAccessTokenResponse.builder()
+      GetAccessTokenResponse.builder()
         .accessToken(authService.recreateAccessToken(refreshToken))
         .build()
     );

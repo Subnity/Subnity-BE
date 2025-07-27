@@ -83,14 +83,12 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     // Redis에 Refresh Token 저장
     RedisUtils.save(jwtDto.getRefreshToken());
 
-    Cookie refreshTokenCookie = new Cookie("RT", jwtDto.getRefreshToken());
-    refreshTokenCookie.setMaxAge(605000);
+    Cookie refreshTokenCookie = new Cookie("x-subnity-token", jwtDto.getRefreshToken());
+    refreshTokenCookie.setMaxAge(604800);
     refreshTokenCookie.setPath("/");
 
     response.addCookie(refreshTokenCookie);
     response.setContentType("text/html;charset=UTF-8");
-
-    // React 사용할 시 코드 수정 필요
     response.getWriter().write(
       String.format(
         """
@@ -103,6 +101,6 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
       )
     );
 
-    log.info("구글 로그인 성공");
+    log.info("Google login successful");
   }
 }

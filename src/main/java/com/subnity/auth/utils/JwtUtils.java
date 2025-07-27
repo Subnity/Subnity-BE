@@ -5,6 +5,7 @@ import com.subnity.common.api_response.status.ErrorStatus;
 import com.subnity.auth.dto.JwtBuilder;
 import com.subnity.auth.dto.JwtClaimsDto;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
@@ -32,7 +32,7 @@ public class JwtUtils {
 
   @PostConstruct
   public void init() {
-    secretKey = Keys.hmacShaKeyFor(this.jwtSecretKey.getBytes(StandardCharsets.UTF_8));
+    secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(this.jwtSecretKey));
     claims = Jwts.claims();
   }
 
@@ -45,9 +45,10 @@ public class JwtUtils {
     claims.put("id", dto.getMemberId());
     claims.put("role", dto.getRole().name());
 
-    Date now = new Date(System.currentTimeMillis());
-    Date accessExpirationDate = new Date(System.currentTimeMillis() + (86400 * 1000));
-    Date refreshExpirationDate = new Date(System.currentTimeMillis() + (604800 * 1000));
+    long nowMs = System.currentTimeMillis();
+    Date now = new Date(nowMs);
+    Date accessExpirationDate = new Date(nowMs + (86400 * 1000));
+    Date refreshExpirationDate = new Date(nowMs + (604800 * 1000));
 
     String accessToken = Jwts.builder()
       .setHeaderParam("typ", "JWT")

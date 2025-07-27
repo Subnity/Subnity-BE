@@ -46,6 +46,6 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
       )
     );
 
-    log.error("구글 로그인 실패", exception);
+    log.error("Google login failed", exception);
   }
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Access Token 재발급 응답 객체")
-public class CreateAccessTokenResponse {
+public class GetAccessTokenResponse {
 
   @Schema(description = "Access Token")
   private String accessToken;

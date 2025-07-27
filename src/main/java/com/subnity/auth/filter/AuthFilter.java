@@ -43,7 +43,7 @@ public class AuthFilter extends OncePerRequestFilter {
     @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
     for (String uri : EXCLUDE_URLS) {
-      if (request.getRequestURI().contains(uri)) {
+      if (request.getRequestURI().contains(uri)) { // 해당 자원이 EXCLUDE_URLS에 있는 자원이면 필터 건너뜀
         filterChain.doFilter(request, response);
         return;
       }
@@ -58,11 +58,7 @@ public class AuthFilter extends OncePerRequestFilter {
       } else { // Access Token의 유효 시간이 만료됐을 경우
         ObjectMapper objectMapper = new ObjectMapper();
         String responseObject = objectMapper.writeValueAsString(
-          ApiResponse.onFailure(
-            ErrorStatus.TOKEN_EXPIRED.getCode(),
-            "만료된 토큰입니다.",
-            null
-          )
+          ApiResponse.onFailure(ErrorStatus.TOKEN_EXPIRED.getCode(), "만료된 토큰입니다.", null)
         );
 
         response.setContentType("application/json;charset=UTF-8");
@@ -74,11 +70,7 @@ public class AuthFilter extends OncePerRequestFilter {
       if(request.getRequestURI().equals("/auth/refresh")) {
         ObjectMapper objectMapper = new ObjectMapper();
         String responseObject = objectMapper.writeValueAsString(
-          ApiResponse.onFailure(
-            ErrorStatus.UNAUTHORIZED.getCode(),
-            "접근 권한이 없습니다.",
-            null
-          )
+          ApiResponse.onFailure(ErrorStatus.UNAUTHORIZED.getCode(), "접근할 수 있는 권한이 없습니다.", null)
         );
 
         response.setContentType("application/json;charset=UTF-8");
