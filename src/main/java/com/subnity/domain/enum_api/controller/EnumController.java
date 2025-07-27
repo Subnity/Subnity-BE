@@ -1,8 +1,8 @@
-package com.subnity.enum_api.controller;
+package com.subnity.domain.enum_api.controller;
 
 import com.subnity.common.api_response.ApiResponse;
-import com.subnity.enum_api.controller.response.ListEnumResponse;
-import com.subnity.enum_api.service.EnumService;
+import com.subnity.domain.enum_api.controller.response.ListEnumResponse;
+import com.subnity.domain.enum_api.service.EnumService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

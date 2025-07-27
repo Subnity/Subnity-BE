@@ -8,6 +8,9 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * RedisConfig : Redis 관련 설정 파일
+ */
 @Configuration
 public class RedisConfig {
 
@@ -22,6 +25,9 @@ public class RedisConfig {
     return new LettuceConnectionFactory(host, Integer.parseInt(port));
   }
 
+  /*
+    직렬화/역직렬화 설정
+   */
   @Bean
   public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
     RedisTemplate<String, Object> template = new RedisTemplate<>();

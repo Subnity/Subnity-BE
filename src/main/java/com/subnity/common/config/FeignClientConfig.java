@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * FeignClientConfig : 외부 API 호출 설정 파일
+ */
 @Configuration
 public class FeignClientConfig {
 

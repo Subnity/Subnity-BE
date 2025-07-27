@@ -6,6 +6,9 @@ import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+/**
+ * S3Config : AWS S3 관련 설정 파일
+ */
 @Configuration
 public class S3Config {
 

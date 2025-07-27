@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * AWS Elastic Beanstalk Health Check를 위한 Controller
+ * HealthController : AWS Elastic Beanstalk Health Check를 위한 Controller
  */
 @Hidden
 @RestController

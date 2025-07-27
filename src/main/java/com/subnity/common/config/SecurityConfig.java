@@ -52,9 +52,9 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/login/**", "/enum/**"
+        "/health", "/login/**", "/enum/**"
       ).permitAll()
-      .requestMatchers(
+      .requestMatchers( // Resource 관련 Url 처리
         "/favicon.ico",
         "/css/**",
         "/js/**",
@@ -71,7 +71,7 @@ public class SecurityConfig {
       .anyRequest().authenticated();
     });
 
-    // OAuth2 인증
+    // OAuth2 인증 설정
     http.oauth2Login(oauth2Config -> {
       oauth2Config.loginPage("/login")
         .userInfoEndpoint(e -> e.userService(oAuth2Service))

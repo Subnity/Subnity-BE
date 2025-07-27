@@ -1,11 +1,11 @@
-package com.subnity.enum_api.service;
+package com.subnity.domain.enum_api.service;
 
 import com.subnity.common.utils.enums.SubscrCategory;
 import com.subnity.common.utils.enums.SubscrStatus;
 import com.subnity.domain.payment_history.enums.PaymentStatus;
 import com.subnity.domain.subscription.enums.PaymentCycle;
-import com.subnity.enum_api.controller.response.ListEnumDto;
-import com.subnity.enum_api.controller.response.ListEnumResponse;
+import com.subnity.domain.enum_api.controller.response.ListEnumDto;
+import com.subnity.domain.enum_api.controller.response.ListEnumResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

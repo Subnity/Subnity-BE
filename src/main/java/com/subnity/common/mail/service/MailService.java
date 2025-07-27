@@ -24,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class MailService {
+
   private final JpaPaymentHistoryRepository jpaPaymentHistoryRepository;
   private final SubscrRepository subscrRepository;
 
@@ -32,13 +33,12 @@ public class MailService {
    * (스케줄러는 매일 새벽 00시 01분에 돌아감)
    */
   @Transactional
-//  @Scheduled(cron = "00 01 00 * * *") // 00:01
-  @Scheduled(cron = "00 05 14 * * *") // 테스트 <------ 이거 나중에 삭제해야함!!
+  @Scheduled(cron = "00 01 00 * * *") // 00:01
   public void mailSearchScheduler() {
     LocalDate now = LocalDate.now();
+
     // 해당 날짜와 구독 날짜가 동일한 구독 목록을 모두 조회
     List<Subscription> subscrList = this.subscrRepository.findSubscrListByDate(now);
-
     subscrList.forEach(subscr -> {
       // 메일 검색 서비스 호출
       List<SearchMail> mailList = MailUtils.mailSearchByKeyword(
