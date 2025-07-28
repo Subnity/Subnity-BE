@@ -17,4 +17,13 @@ public class ViewController {
   public String login() {
     return "login";
   }
+
+  /**
+   * 개인정보처리방침 페이지
+   * @return : 개인정보처리방침 페이지 반환
+   */
+  @GetMapping(value = "/privacy-policy")
+  public String privacyPolicy() {
+    return "privacy-policy";
+  }
 }

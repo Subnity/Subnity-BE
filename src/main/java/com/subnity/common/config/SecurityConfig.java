@@ -54,7 +54,7 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/login/**", "/enum/**"
+        "/health", "/privacy-policy", "/login/**", "/enum/**"
       ).permitAll()
       .requestMatchers( // Resource 관련 Url 처리
         "/favicon.ico",
