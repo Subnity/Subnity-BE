@@ -17,8 +17,8 @@ import java.io.IOException;
 @Slf4j
 public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-  @Value("${server.site_url}")
-  private String siteUrl;
+  @Value("${server.client_url}")
+  private String clientUrl;
 
   /**
    * OAuth2 인증에 실패할 경우 실행될 메서드
@@ -42,10 +42,10 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
             window.close();
           </script>
         """,
-        siteUrl
+        clientUrl // 에러 페이지로 변경 예정
       )
     );
 
-    log.error("구글 로그인 실패", exception);
+    log.error("Google login failed", exception);
   }
 }

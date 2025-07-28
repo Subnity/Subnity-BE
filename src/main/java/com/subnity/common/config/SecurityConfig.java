@@ -1,5 +1,6 @@
 package com.subnity.common.config;
 
+import com.subnity.auth.resolver.OAuth2AuthRequestResolver;
 import com.subnity.auth.service.OAuth2Service;
 import com.subnity.auth.filter.AuthFilter;
 import com.subnity.auth.handler.AuthFailureHandler;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -42,7 +44,7 @@ public class SecurityConfig {
    * @throws Exception : 예외 처리
    */
   @Bean
-  public SecurityFilterChain defaultFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain defaultFilterChain(HttpSecurity http, ClientRegistrationRepository clientRegistrationRepository) throws Exception {
     http.httpBasic(AbstractHttpConfigurer::disable)
       .formLogin(AbstractHttpConfigurer::disable)
       .csrf(AbstractHttpConfigurer::disable)
@@ -52,9 +54,9 @@ public class SecurityConfig {
 
     http.authorizeHttpRequests(authorizeRequests -> {
       authorizeRequests.requestMatchers( // Security 인증 filter 패스
-        "/health", "/test/**", "/login/**", "/enum/**"
+        "/health", "/login/**", "/enum/**"
       ).permitAll()
-      .requestMatchers(
+      .requestMatchers( // Resource 관련 Url 처리
         "/favicon.ico",
         "/css/**",
         "/js/**",
@@ -71,9 +73,12 @@ public class SecurityConfig {
       .anyRequest().authenticated();
     });
 
-    // OAuth2 인증
+    // OAuth2 인증 설정
     http.oauth2Login(oauth2Config -> {
       oauth2Config.loginPage("/login")
+        .authorizationEndpoint(e -> e.authorizationRequestResolver(
+          new OAuth2AuthRequestResolver(clientRegistrationRepository, "/oauth2/authorization"))
+        ) // (Google Refresh Token 발급을 위함)
         .userInfoEndpoint(e -> e.userService(oAuth2Service))
         .successHandler(successHandler)
         .failureHandler(failureHandler);

@@ -8,6 +8,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+/**
+ * MemberUtils : 회원 관련 유틸 클래스
+ */
 @Component
 @RequiredArgsConstructor
 public class MemberUtils {
@@ -19,8 +22,10 @@ public class MemberUtils {
     jpaMemberRepository = this.nonJpaMemberRepository;
   }
 
-  /*
-   * 구조 개선 필요
+  /**
+   * 인증된 회원 검색 메서드
+   * @param memberId : 회원 ID
+   * @return : 회원 반환
    */
   public static Member getMember(String memberId) {
     return jpaMemberRepository.findById(memberId)

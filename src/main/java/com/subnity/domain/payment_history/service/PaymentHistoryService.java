@@ -47,7 +47,7 @@ public class PaymentHistoryService {
    */
   public List<GetPaymentHistoryResponse> getPaymentHistoryList() {
     String memberId = SecurityUtils.getAuthMemberId();
-    List<PaymentHistory> paymentHistoryList = this.paymentHistoryRepository.paymentHistoryList(memberId);
+    List<PaymentHistory> paymentHistoryList = this.paymentHistoryRepository.paymentHistoryListByMemberId(memberId);
 
     List<GetPaymentHistoryResponse> paymentHistoryResponseList = new ArrayList<>();
     paymentHistoryList.forEach(paymentHistory -> paymentHistoryResponseList.add(PaymentHistory.from(paymentHistory)));

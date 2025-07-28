@@ -51,9 +51,7 @@ public class SubscrService {
           .isNotification(request.isNotification())
           .paymentCycle(request.paymentCycle())
           .lastPaymentDate(request.lastPaymentDate())
-          .nextPaymentDate(
-            this.getNextPaymentDate(request.lastPaymentDate(), request.paymentCycle())
-          )
+          .nextPaymentDate(this.getNextPaymentDate(request.lastPaymentDate(), request.paymentCycle()))
           .member(member)
           .build()
       );
@@ -122,16 +120,12 @@ public class SubscrService {
       case MONTH:
         String lastMonth = date.format(DateTimeFormatter.ofPattern("MM"));
         for (String m : MONTHS) {
-          if (lastMonth.equals(m)) { // 31이 있는 달
-            /*
-              31일에서 +1하는 이유는 스케줄러 때문입니다.
-              만약 결제일 밤 23시에 스케줄러가 돌아간다면 그 뒤 1시간동안 결제된 메일을 검색할 수 없기 때문에 00시에 전날(결제일) 메일을 검색할 수 있도록 31일에서 +1을 했습니다.
-             */
-            nextPaymentDate = date.plusDays(32);
+          if (lastMonth.equals(m)) {
+            nextPaymentDate = date.plusDays(31);
             return nextPaymentDate;
           }
         }
-        nextPaymentDate = date.plusDays(31);
+        nextPaymentDate = date.plusDays(30);
         break;
       case YEAR:
         nextPaymentDate = date.plusYears(1);

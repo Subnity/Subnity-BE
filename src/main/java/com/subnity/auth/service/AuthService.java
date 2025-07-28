@@ -23,10 +23,7 @@ public class AuthService {
    */
   public String recreateAccessToken(String token) {
     String refreshToken = RedisUtils.get(token);
-
-    if (token != null && refreshToken != null && !token.equals(refreshToken)) {
-      throw new GeneralException(ErrorStatus.UNAUTHORIZED, "잘못된 토큰입니다.");
-    }
+    if (token != null && refreshToken != null && !token.equals(refreshToken)) throw new GeneralException(ErrorStatus.UNAUTHORIZED, "잘못된 토큰입니다.");
 
     if (refreshToken != null && JwtUtils.getValidateToken(refreshToken)) {
       String memberId = JwtUtils.getMemberId(refreshToken);

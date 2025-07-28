@@ -31,10 +31,6 @@ public class Member extends BaseTimeEntity {
   @Column(name = "profile_url", nullable = false)
   private String profileUrl;
 
-  @Column(name = "mail", nullable = false)
-  @Convert(converter = CryptoConverter.class)
-  private String mail;
-
   @Enumerated(EnumType.STRING)
   @Column(name = "role", nullable = false)
   private Role role;
@@ -43,11 +39,16 @@ public class Member extends BaseTimeEntity {
   @Convert(converter = BooleanToYNConverter.class)
   private Boolean isNotification;
 
-  @Column(name = "mail_token")
+  @Column(name = "mail", nullable = false)
+  @Convert(converter = CryptoConverter.class)
+  private String mail;
+
+  @Column(name = "mail_token", nullable = false)
   private String mailToken;
 
-  @Column(name = "scheduler_id")
-  private String schedulerId;
+  @Column(name = "mail_refresh_token")
+  @Convert(converter = CryptoConverter.class)
+  private String mailRefreshToken;
 
   @Builder.Default
   @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)

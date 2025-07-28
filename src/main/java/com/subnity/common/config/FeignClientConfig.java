@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * FeignClientConfig : 외부 API 호출 설정 파일
+ */
 @Configuration
 public class FeignClientConfig {
 
@@ -29,8 +32,10 @@ public class FeignClientConfig {
   @Bean
   public RequestInterceptor requestInterceptor() {
     return requestTemplate -> {
-      requestTemplate.header("Content-Type", "application/json");
-      requestTemplate.header("Accept", "application/json");
+      if (requestTemplate.url().contains("gmail/v1/users/me")) {
+        requestTemplate.header("Content-Type", "application/json");
+        requestTemplate.header("Accept", "application/json");
+      }
     };
   }
 }

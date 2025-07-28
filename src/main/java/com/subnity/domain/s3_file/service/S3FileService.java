@@ -45,22 +45,21 @@ public class S3FileService {
 
     try {
       s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+      String s3FileUrl = String.format("https://%s.s3.ap-northeast-2.amazonaws.com/%s", bucket, fileName);
+
+      this.s3FileRepository.save(
+        S3File.builder()
+          .fileName(fileName)
+          .originalName(originalFileName)
+          .s3Url(s3FileUrl)
+          .fileSize(file.getSize())
+          .build()
+      );
+
+      return s3FileUrl;
     } catch (Exception e) {
       throw new GeneralException(ErrorStatus.INTERNAL_ERROR, "파일 업로드에 실패했습니다.");
     }
-
-    String s3FileUrl = String.format("https://%s.s3.ap-northeast-2.amazonaws.com/%s", bucket, fileName);
-
-    this.s3FileRepository.save(
-      S3File.builder()
-        .fileName(fileName)
-        .originalName(originalFileName)
-        .s3Url(s3FileUrl)
-        .fileSize(file.getSize())
-        .build()
-    );
-
-    return s3FileUrl;
   }
 
   /**

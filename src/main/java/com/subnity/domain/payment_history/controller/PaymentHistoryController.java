@@ -16,7 +16,7 @@ import java.util.List;
  * PaymentHistoryController : 결제 히스토리 Controller
  */
 @RestController
-@RequestMapping(value = "/payment")
+@RequestMapping(value = "/payment-history")
 @RequiredArgsConstructor
 @Tag(name = "Payment History", description = "결제 히스토리 관련 API")
 public class PaymentHistoryController {

@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -27,10 +30,12 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-  private final JpaMemberRepository memberRepository;
 
-  @Value("${server.site_url}")
-  private String siteUrl;
+  private final JpaMemberRepository memberRepository;
+  private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
+
+  @Value("${server.client_url}")
+  private String clientUrl;
 
   @Value("${default-profile-url}")
   private String defaultProfileUrl;
@@ -52,11 +57,20 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     Role role = Role.valueOf(user.getAuthorities().iterator().next().getAuthority());
     Member findMember = memberRepository.findById(user.getId()).orElse(null);
 
+    OAuth2AuthenticationToken oauth2Token = (OAuth2AuthenticationToken) authentication;
+    String clientRegistrationId = oauth2Token.getAuthorizedClientRegistrationId();
+    String principalName = oauth2Token.getName();
+    OAuth2AuthorizedClient authorizedClient = oAuth2AuthorizedClientService.loadAuthorizedClient(clientRegistrationId, principalName);
+
+    String refreshToken = null;
+    if (authorizedClient != null && authorizedClient.getRefreshToken() != null) refreshToken = authorizedClient.getRefreshToken().getTokenValue();
+
     // 이미 로그인한 회원이 존재하는지 여부
     if (findMember != null) {
       memberRepository.save(
         findMember.toBuilder()
           .mailToken(user.getAccessToken())
+          .mailRefreshToken(refreshToken)
           .build()
       );
     } else {
@@ -69,6 +83,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
           .isNotification(true)
           .mail(user.getEmail())
           .mailToken(user.getAccessToken())
+          .mailRefreshToken(refreshToken)
           .build()
       );
     }
@@ -83,14 +98,12 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     // Redis에 Refresh Token 저장
     RedisUtils.save(jwtDto.getRefreshToken());
 
-    Cookie refreshTokenCookie = new Cookie("RT", jwtDto.getRefreshToken());
-    refreshTokenCookie.setMaxAge(605000);
+    Cookie refreshTokenCookie = new Cookie("x-subnity-token", jwtDto.getRefreshToken());
+    refreshTokenCookie.setMaxAge(604800);
     refreshTokenCookie.setPath("/");
 
     response.addCookie(refreshTokenCookie);
     response.setContentType("text/html;charset=UTF-8");
-
-    // React 사용할 시 코드 수정 필요
     response.getWriter().write(
       String.format(
         """
@@ -99,10 +112,10 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             window.close();
           </script>
         """,
-        jwtDto.getAccessToken(), siteUrl
+        jwtDto.getAccessToken(), clientUrl
       )
     );
 
-    log.info("구글 로그인 성공");
+    log.info("Google login successful");
   }
 }

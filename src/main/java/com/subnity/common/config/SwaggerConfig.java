@@ -5,18 +5,25 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.*;
 import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * SwaggerConfig : Swagger 관련 설정 파일
+ */
 @Configuration
 public class SwaggerConfig {
+
+  @Value("${server.site_url}")
+  private String siteUrl;
 
   @Bean
   public OpenAPI openAPI() {
     Info info = new Info()
-      .title("구독 비용 관리 서비스 API 명세서")
+      .title("Subnity API 명세서")
       .description("Subnity API")
-      .version("mvp");
+      .version("v1");
 
     // JWT 구현 시 제거
     String jwtSchemeName = "JWT TOKEN";
@@ -30,45 +37,9 @@ public class SwaggerConfig {
         .bearerFormat("JWT")
         .in(SecurityScheme.In.HEADER));
 
-//    SecurityRequirement securityRequirement = new SecurityRequirement().addList("oauth2");
-//    Components components = new Components()
-//      .addSecuritySchemes("oauth2",
-//        new SecurityScheme()
-//          .type(SecurityScheme.Type.OAUTH2)
-//          .flows(new OAuthFlows()
-//            .authorizationCode(new OAuthFlow()
-//              .authorizationUrl("https://accounts.google.com/o/oauth2/v2/auth")
-//              .tokenUrl("https://oauth2.googleapis.com/token")
-//              .scopes(new Scopes()
-//                .addString("profile", "Profile")
-//                .addString("email", "Email")
-//                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Readonly")
-//              )
-//            )
-//          )
-//      );
-
-//    SecurityRequirement securityRequirement = new SecurityRequirement().addList("Google OAuth2");
-//    Components components = new Components()
-//      .addSecuritySchemes("Google OAuth2",
-//        new SecurityScheme()
-//          .type(SecurityScheme.Type.OAUTH2)
-//          .flows(new OAuthFlows()
-//            .authorizationCode(new OAuthFlow()
-//              .authorizationUrl("/oauth2/authorization/google")
-//              .tokenUrl("https://oauth2.googleapis.com/token")
-//              .scopes(new Scopes()
-//                .addString("profile", "Profile")
-//                .addString("email",   "Email")
-//                .addString("https://www.googleapis.com/auth/gmail.readonly", "Gmail Read‑only")
-//              )
-//            )
-//          )
-//      );
-
     return new OpenAPI()
       .info(info)
-      .addServersItem(new Server().url("/"))
+      .addServersItem(new Server().url(siteUrl))
       .addSecurityItem(securityRequirement)
       .components(components);
   }

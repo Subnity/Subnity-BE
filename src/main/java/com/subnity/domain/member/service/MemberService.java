@@ -1,10 +1,12 @@
 package com.subnity.domain.member.service;
 
 import com.subnity.auth.utils.SecurityUtils;
+import com.subnity.domain.member.Member;
 import com.subnity.domain.member.controller.request.UpdateMemberRequest;
 import com.subnity.domain.member.controller.response.GetMemberResponse;
 import com.subnity.domain.member.repository.JpaMemberRepository;
 import com.subnity.domain.member.repository.MemberRepository;
+import com.subnity.domain.member.utils.MemberUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,16 @@ public class MemberService {
    */
   public GetMemberResponse getMember() {
     String memberId = SecurityUtils.getAuthMemberId();
-    return memberRepository.findById(memberId);
+    Member member = MemberUtils.getMember(memberId);
+
+    return GetMemberResponse.builder()
+      .memberId(memberId)
+      .role(member.getRole())
+      .name(member.getName())
+      .mail(member.getMail())
+      .isNotification(member.getIsNotification())
+      .profileUrl(member.getProfileUrl())
+      .build();
   }
 
   /**
@@ -33,15 +44,6 @@ public class MemberService {
   public void updateMember(UpdateMemberRequest request) {
     String memberId = SecurityUtils.getAuthMemberId();
     memberRepository.update(request, memberId);
-  }
-
-  /**
-   * Scheduler ID 수정 메서드
-   * @param schedulerId : Scheduler ID
-   */
-  public void updateSchedulerId(String schedulerId) {
-    String memberId = SecurityUtils.getAuthMemberId();
-    memberRepository.updateSchedulerId(schedulerId, memberId);
   }
 
   /**

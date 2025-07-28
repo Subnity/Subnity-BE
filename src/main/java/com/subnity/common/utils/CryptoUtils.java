@@ -10,6 +10,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * CryptoUtils : 암호화/복호화 관련 유틸 클래스
+ */
 @Component
 public class CryptoUtils {
 
@@ -28,7 +31,11 @@ public class CryptoUtils {
     transformation = this.nonTransformation;
   }
 
-  // 암호화
+  /**
+   * 암호화 메서드
+   * @param plainText : 평문 데이터
+   * @return : 암호화된 데이터 반환
+   */
   public static String encrypt(String plainText) {
     try {
       SecretKeySpec secretKey = new SecretKeySpec(privateKey.getBytes(StandardCharsets.UTF_8), "AES");
@@ -43,7 +50,11 @@ public class CryptoUtils {
     }
   }
 
-  // 복호화
+  /**
+   * 복호화 메서드
+   * @param cipherText : 암호화 데이터
+   * @return : 복호화된 평문 데이터 반환
+   */
   public static String decrypt(String cipherText) {
     try {
       SecretKeySpec secretKey = new SecretKeySpec(privateKey.getBytes(StandardCharsets.UTF_8), "AES");

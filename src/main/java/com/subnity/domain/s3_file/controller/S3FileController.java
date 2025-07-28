@@ -24,7 +24,7 @@ public class S3FileController {
    * @param file : 파일
    * @return : S3 파일 Url 반환
    */
-  @PostMapping(value = "/put", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+  @PostMapping(value = "/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
   @Operation(summary = "S3 파일 업로드", description = "S3 파일 업로드 엔드포인트")
   public ApiResponse<String> uploadFile(@RequestPart MultipartFile file) {
     return ApiResponse.onSuccess(s3Service.uploadFile(file));

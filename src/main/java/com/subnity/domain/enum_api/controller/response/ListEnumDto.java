@@ -1,4 +1,4 @@
-package com.subnity.enum_api.controller.response;
+package com.subnity.domain.enum_api.controller.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

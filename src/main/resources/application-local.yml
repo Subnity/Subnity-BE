@@ -1,5 +1,6 @@
 server:
   site_url: ${SITE_URL}
+  client_url: ${CLIENT_URL}
 
 springdoc:
   swagger-ui:

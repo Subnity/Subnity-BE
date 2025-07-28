@@ -104,4 +104,3 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     return super.handleExceptionInternal(e, body, HttpHeaders.EMPTY, errorCommonStatus.getHttpStatus(), request);
   }
 }
-
