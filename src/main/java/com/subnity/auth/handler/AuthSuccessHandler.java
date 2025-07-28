@@ -34,8 +34,8 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
   private final JpaMemberRepository memberRepository;
   private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
-  @Value("${server.site_url}")
-  private String siteUrl;
+  @Value("${server.client_url}")
+  private String clientUrl;
 
   @Value("${default-profile-url}")
   private String defaultProfileUrl;
@@ -112,7 +112,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             window.close();
           </script>
         """,
-        jwtDto.getAccessToken(), siteUrl
+        jwtDto.getAccessToken(), clientUrl
       )
     );
 
