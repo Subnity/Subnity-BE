@@ -73,11 +73,10 @@ public class MailUtils {
    * @param dto : 메일 정보 Dto 객체
    * @return : 검색한 메일 목록을 반환
    */
-  public static List<SearchMail> mailSearchByKeyword(SearchMailDto dto, Member member) {
+  public static List<SearchMail> mailSearchByKeyword(SearchMailDto dto, Member member, LocalDate now) {
     List<SearchMail> searchMailList = new ArrayList<>();
 
     String mailToken = "Bearer " + member.getMailToken();
-    LocalDate now = LocalDate.now();
 
     String query = "subject:" + dto.getKeyword() + " 결제내역";
     List<Map<String, String>> mailList = gmailClient.getGmailList(mailToken, query, 20).getMessages();
