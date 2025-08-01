@@ -112,7 +112,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             window.close();
           </script>
         """,
-        jwtDto.getAccessToken(), clientUrl
+        jwtDto.getAccessToken(), clientUrl + "/login"
       )
     );
 
