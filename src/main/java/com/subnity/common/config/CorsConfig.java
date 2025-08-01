@@ -17,7 +17,8 @@ public class CorsConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
       .allowedOriginPatterns(
-        "http://localhost:5173"
+        "http://localhost:5173",
+        "https://subnity.vercel.app"
       )
       .allowedMethods(
         HttpMethod.GET.name(), HttpMethod.POST.name(),
